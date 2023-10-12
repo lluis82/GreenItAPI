@@ -15,12 +15,12 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/user")
-    public User getUser(@RequestParam String email){
+    public User getUser(@RequestParam String email) {
         Optional<User> user = userService.getUser(email);
         return (User) user.orElse(null);
     }
