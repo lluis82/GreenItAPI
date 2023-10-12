@@ -1,6 +1,6 @@
 package com.greenit.greenitapi.Controller;
 
-import com.greenit.greenitapi.Models.UserEjemplo;
+import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +20,9 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public UserEjemplo getUser(@RequestParam String email){
-        Optional<UserEjemplo> user = userService.getUser(email);
-        return (UserEjemplo) user.orElse(null);
+    public User getUser(@RequestParam String email){
+        Optional<User> user = userService.getUser(email);
+        return (User) user.orElse(null);
     }
 
 }
