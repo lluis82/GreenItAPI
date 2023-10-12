@@ -1,37 +1,68 @@
 package com.greenit.greenitapi.Services;
 
-import com.greenit.greenitapi.Models.UserEjemplo;
+import com.greenit.greenitapi.Entities.User;
+import com.greenit.greenitapi.Util.Config;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Optional;
 
 @Service
 public class UserService {
-    List<UserEjemplo> userList;
+    private static Connection connection;
+
+    private static Config config = new Config();
 
     public UserService(){
-        userList = new ArrayList<>();
-
-        UserEjemplo user1 = new UserEjemplo("ida@mail.com","Ida");
-        UserEjemplo user2 = new UserEjemplo("hans@mail.com","Hans");
-        UserEjemplo user3 = new UserEjemplo("lars@mail.com","Lars");
-        UserEjemplo user4 = new UserEjemplo("ben@mail.com","Ben");
-        UserEjemplo user5 = new UserEjemplo("eva@mail.com","Eva");
-
-        userList.addAll(Arrays.asList(user1,user2,user3,user4,user5));
     }
 
-    public Optional<UserEjemplo> getUser(String email) {
-        Optional<UserEjemplo> optional = Optional.empty();
-        for (UserEjemplo user: userList) {
-            if(email.equals(user.getEmail())){
-                optional = Optional.of(user);
-                return optional;
-            }
+    public Optional<User> getUser(String emailIn) {
+
+        //esto es una mierda y lo tengo que mover de sitio peeeero no me importa rn
+        //also usar properties / config
+        Optional<User> optional = Optional.empty();
+        User user = null;
+        try {
+            connection = DriverManager.getConnection(
+                    "jdbc:mariadb://localhost:3306/merequetengue",
+                    "root", "adre1234"
+            );
+        }catch(Exception e){
+            System.out.println("Error al conectar con la BD de mariaDB");
         }
+
+
+
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+            SELECT *
+            FROM Users u
+            WHERE u.email like ?
+        """)) {
+            statement.setString(1,emailIn);//esto es para reemplazar el ? por el email
+            //es muy cursed i know
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1); // by column index
+                String name = resultSet.getString("userName"); // by column name
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+
+                System.out.println("--== DATOS ==--");
+                System.out.println("ID:" + id);
+                System.out.println("Nombre:" + name);
+                System.out.println("Email:" + email);
+                System.out.println("Password:" + password);
+
+                user = new User(name, email, password, config.getSrvName());
+            }
+        }catch(Exception e){
+            System.out.println("Error al recuperar info de la BD");
+        }
+        optional = Optional.of(user);
         return optional;
     }
 }
