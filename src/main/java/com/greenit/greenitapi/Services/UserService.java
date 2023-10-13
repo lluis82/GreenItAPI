@@ -15,10 +15,7 @@ public class UserService {
     private static Connection connection;
     private static Config config = new Config();
 
-    public UserService() {
-    }
-
-    public Optional<User> getUser(String emailIn) {
+    public static Optional<User> getUser(String emailIn) {
         Optional<User> optional;
         User user = null;
         connection = mariadbConnect.mdbconn();
@@ -40,13 +37,6 @@ public class UserService {
                 String name = resultSet.getString("userName"); // by column name
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-/*
-                System.out.println("--== DATOS ==--");
-                System.out.println("ID:" + id);
-                System.out.println("Nombre:" + name);
-                System.out.println("Email:" + email);
-                System.out.println("Password:" + password);
-*/
                 user = new User(name, email, password, config.getSrvName());
             }
         } catch (Exception e) {
