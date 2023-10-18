@@ -25,4 +25,10 @@ public class UserController {
         return (User) user.orElse(null);
     }
 
+    @GetMapping("/register")
+    public String register(@RequestParam String email,@RequestParam String password,@RequestParam String username) {
+        String sol = userService.register(email, password, username);
+        return sol;
+    }
+
 }

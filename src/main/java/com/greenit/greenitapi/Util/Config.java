@@ -22,6 +22,7 @@ MDBPASS= adre1234
     String comment =
             "#ARCHIVO DE CONFIG DE SERVER GREENIT API\n" +
             "#OWNNAME -> El nombre del servidor\n" +
+            "#PUBLICIP -> La IP pública del servidor\n" +
             "#MARIADB -> La URL del servidor de MariaDB\n" +
             "#MDBUSER -> El usuario para mariaDB\n" +
             "#MDBPASS -> La contraseña para mariaDB\n\n\n";
@@ -37,6 +38,7 @@ MDBPASS= adre1234
         if(getSrvName() == null ){setSrvName("Touka");}
         if(getMdbPass() == null ){setMdbPass("adre1234");}
         if(getMdbUser() == null ){setMdbUser("root");}
+        if(getSrvIp() == null ){setSrvIp("127.0.0.1");}
         if(getMdbURL() == null ){setMdbURL("jdbc:mariadb://localhost:3306/merequetengue");}
         //endregion
     }
@@ -51,6 +53,18 @@ MDBPASS= adre1234
     }
     public void setSrvName(String newName){
         properties.setProperty("OWNNAME",""+newName);
+        try {
+            saveProperties();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getSrvIp(){
+        return (String)properties.get("PUBLICIP");
+    }
+    public void setSrvIp(String newIP){
+        properties.setProperty("PUBLICIP",""+newIP);
         try {
             saveProperties();
         } catch (IOException e) {

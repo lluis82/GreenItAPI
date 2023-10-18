@@ -45,4 +45,24 @@ public class UserService {
         optional = Optional.of(user);
         return optional;
     }
+
+    public static String register(String emailIn, String password, String username) {
+        connection = mariadbConnect.mdbconn();
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    INSERT INTO users (email, userName, password) VALUES (?, ?, ?)
+                """)) {
+            statement.setString(1,emailIn);
+            statement.setString(2,username);
+            statement.setString(3,password);
+            //esto es para reemplazar el ? por el email
+            //es muy cursed i know
+
+            ResultSet resultSet = statement.executeQuery();
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+            return config.getSrvName() + " FAIL";
+        }
+        return config.getSrvName() + " OK";
+    }
+
 }
