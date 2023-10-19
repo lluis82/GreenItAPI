@@ -71,5 +71,26 @@ public class ServerService {
 
     }
 
+    public static String srvRegister(String ip, String servername) {
+        connection = mariadbConnect.mdbconn();
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    INSERT INTO servers (ip, name, isSeed) VALUES (?, ?, ?)
+                """)) {
+            statement.setString(1,ip);
+            statement.setString(2,servername);
+            if(ip.equals(config.getSrvIp()))
+                statement.setInt(3,1);
+            statement.setInt(3,0);
+            //esto es para reemplazar el ? por el email
+            //es muy cursed i know
+
+            ResultSet resultSet = statement.executeQuery();
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+            return config.getSrvName() + " FAIL";
+        }
+        return config.getSrvName() + " OK";
+    }
+
 
 }
