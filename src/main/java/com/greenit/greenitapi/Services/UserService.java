@@ -46,6 +46,38 @@ public class UserService {
         return optional;
     }
 
+    public static Optional<User> getUserByName(String username) {
+        Optional<User> optional;
+        User user = null;
+        connection = mariadbConnect.mdbconn();
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM Users u
+                    WHERE u.username like ?
+                """)) {
+
+            statement.setString(1, username);
+            //esto es para reemplazar el ? por el email
+            //es muy cursed i know
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1); // by column index
+                String name = resultSet.getString("userName"); // by column name
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                user = new User(name, email, password, config.getSrvName());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+        }
+        optional = Optional.of(user);
+        return optional;
+    }
+
+
     public static String register(String emailIn, String password, String username) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""

@@ -1,9 +1,46 @@
 package com.greenit.greenitapi.Entities;
 
 public class Step {
-    private String id;
+    private int id;
     private Step previousStep;
     private String description;
+
+    public Step(String description, int id, Step previousStep){
+        this.previousStep = previousStep;
+        this.description = description;
+        this.id = id;
+    }
+
+    public Step(String description, int id){
+        this.previousStep = null;
+        this.description = description;
+        this.id = id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPreviousStep(Step previousStep) {
+        this.previousStep = previousStep;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Step getPreviousStep() {
+        return previousStep;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     //private String image;
     //private List<Comment> comments;
 

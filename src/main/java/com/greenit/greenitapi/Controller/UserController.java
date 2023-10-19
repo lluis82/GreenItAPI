@@ -25,6 +25,12 @@ public class UserController {
         return (User) user.orElse(null);
     }
 
+    @GetMapping("/getUserByName")
+    public User getUserbyName(@RequestParam String username) {
+        Optional<User> user = userService.getUserByName(username);
+        return (User) user.orElse(null);
+    }
+
     @GetMapping("/register")
     public String register(@RequestParam String email,@RequestParam String password,@RequestParam String username) {
         String sol = userService.register(email, password, username);

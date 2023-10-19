@@ -4,6 +4,7 @@ import com.greenit.greenitapi.Entities.Server;
 import com.greenit.greenitapi.Services.ServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class ServerController {
     public List<Server> getServers() {
         Optional<List<Server>> server = serverService.getServers();
         return (List<Server>) server.orElse(null);
+    }
+
+    @GetMapping("/meet")
+    public String meetServer(@RequestParam String serverip, @RequestParam String servername) {
+        String sol = serverService.srvRegister(serverip, servername);
+        return sol;
     }
 
     @GetMapping("/server")
