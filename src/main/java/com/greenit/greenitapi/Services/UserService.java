@@ -27,17 +27,14 @@ public class UserService {
                 """)) {
 
             statement.setString(1, emailIn);
-            //esto es para reemplazar el ? por el email
-            //es muy cursed i know
-
             ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt(1); // by column index
-                String name = resultSet.getString("userName"); // by column name
-                String email = resultSet.getString("email");
-                String password = resultSet.getString("password");
-                user = new User(name, email, password, config.getSrvName());
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    String name = resultSet.getString("userName");
+                    String email = resultSet.getString("email");
+                    String password = resultSet.getString("password");
+                    user = new User(name, email, password, config.getSrvName());
+                } while (resultSet.next());
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -58,17 +55,16 @@ public class UserService {
                 """)) {
 
             statement.setString(1, username);
-            //esto es para reemplazar el ? por el email
-            //es muy cursed i know
-
             ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt(1); // by column index
-                String name = resultSet.getString("userName"); // by column name
-                String email = resultSet.getString("email");
-                String password = resultSet.getString("password");
-                user = new User(name, email, password, config.getSrvName());
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    String name = resultSet.getString("userName");
+                    String email = resultSet.getString("email");
+                    String password = resultSet.getString("password");
+                    System.out.println(name + " " + email + " " + password + " " + config.getSrvName());
+                    user = new User(name, email, password, config.getSrvName());
+                } while (resultSet.next());
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -86,10 +82,7 @@ public class UserService {
             statement.setString(1,emailIn);
             statement.setString(2,username);
             statement.setString(3,password);
-            //esto es para reemplazar el ? por el email
-            //es muy cursed i know
-
-            ResultSet resultSet = statement.executeQuery();
+            statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             return config.getSrvName() + " FAIL";
