@@ -23,6 +23,7 @@ public class ServerController {
     @GetMapping("/servers")
     public List<Server> getServers() {
         Optional<List<Server>> server = serverService.getServers();
+        if(server == null) return null;
         return (List<Server>) server.orElse(null);
     }
 
@@ -35,6 +36,7 @@ public class ServerController {
     @GetMapping("/server")
     public Server getServer() {
         Optional<Server> server = serverService.getownServer();
+        if(server == null) return null;
         return (Server) server.orElse(null);
     }
 

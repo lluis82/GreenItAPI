@@ -20,8 +20,22 @@ public class StepController {
     }
 
     @GetMapping("/step")
-    public Step getPostByid(@RequestParam int id) {
+    public Step getStepByid(@RequestParam int id) {
         Optional<Step> step = StepService.getStepById(id);
+        if(step == null) return null;
         return (Step) step.orElse(null);
+    }
+
+    @GetMapping("/prevstep")
+    public Step getStepByPrevId(@RequestParam int previd) {
+        Optional<Step> step = StepService.getStepByPrevId(previd);
+        if(step == null) return null;
+        return (Step) step.orElse(null);
+    }
+
+    @GetMapping("/commit")
+    public String publishPost(@RequestParam int prevStepId, @RequestParam Boolean isFirst, @RequestParam String description, @RequestParam int postid) {
+        String sol = stepService.publishStep(prevStepId, isFirst, description, postid);
+        return sol;
     }
 }

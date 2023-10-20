@@ -57,11 +57,13 @@ public class ServerService {
             statement.setString(1,config.getSrvName());
             ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String ip = resultSet.getString("ip");
-                Boolean isSeed = resultSet.getBoolean("isSeed");
-                server = new Server(name, ip, isSeed);
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    String name = resultSet.getString("name");
+                    String ip = resultSet.getString("ip");
+                    Boolean isSeed = resultSet.getBoolean("isSeed");
+                    server = new Server(name, ip, isSeed);
+                } while (resultSet.next());
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -81,9 +83,6 @@ public class ServerService {
             if(ip.equals(config.getSrvIp()))
                 statement.setInt(3,1);
             statement.setInt(3,0);
-            //esto es para reemplazar el ? por el email
-            //es muy cursed i know
-
             ResultSet resultSet = statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");

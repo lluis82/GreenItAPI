@@ -22,12 +22,14 @@ public class UserController {
     @GetMapping("/user")
     public User getUser(@RequestParam String email) {
         Optional<User> user = userService.getUser(email);
+        if(user == null) return null;
         return (User) user.orElse(null);
     }
 
     @GetMapping("/getUserByName")
     public User getUserbyName(@RequestParam String username) {
         Optional<User> user = userService.getUserByName(username);
+        if(user == null) return null;
         return (User) user.orElse(null);
     }
 

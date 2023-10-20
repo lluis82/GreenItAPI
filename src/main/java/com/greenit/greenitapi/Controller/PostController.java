@@ -25,6 +25,13 @@ public class PostController {
     @GetMapping("/post")
     public List<Post> getPostByUser(@RequestParam String username) {
         Optional<List<Post>> post = postService.getPostByUser(username);
+        if(post == null) return null;
         return (List<Post>) post.orElse(null);
+    }
+
+    @GetMapping("/publish")
+    public String publishPost(@RequestParam String username) {
+        String sol = postService.publishPost(username);
+        return sol;
     }
 }
