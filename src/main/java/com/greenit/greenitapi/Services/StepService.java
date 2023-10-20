@@ -24,7 +24,7 @@ public class StepService {
         if(stepId == 0){
             try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
-                    FROM Step s
+                    FROM step s
                     WHERE s.previousStep IS NULL
                 """)) {
                 ResultSet resultSet = statement.executeQuery();
@@ -45,7 +45,7 @@ public class StepService {
         } else {
             try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
-                    FROM Step s
+                    FROM step s
                     WHERE s.previousStep like ?
                 """)) {
                 statement.setInt(1, stepId);
@@ -75,7 +75,7 @@ public class StepService {
 
         try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
-                    FROM Step s
+                    FROM step s
                     WHERE s.id like ?
                 """)) {
 

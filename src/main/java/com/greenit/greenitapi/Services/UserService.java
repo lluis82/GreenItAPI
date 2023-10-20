@@ -22,7 +22,7 @@ public class UserService {
 
         try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
-                    FROM Users u
+                    FROM users u
                     WHERE u.email like ?
                 """)) {
 
