@@ -28,5 +28,6 @@ public class GreenItApiApplication {
         System.out.println("Números secretos para el servidor " + config.getSrvName());
         System.out.println(enigma.encode(config.getSrvName(), config.getSrvIp()));
         System.out.println(enigma.decode("Touka",enigma.encode(config.getSrvName(), config.getSrvIp())));
+        System.out.println("Corriendo sobre: " + System.getProperty("os.name"));
     }
 }

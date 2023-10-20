@@ -8,16 +8,10 @@ import java.util.Properties;
 public class Config {
     //Sí, he copiado esta clase entera del proyecto de PSW y no tengo ninguna clase de remordimiento
 
-    /* copia de properties por si acaso
-    *
-OWNNAME= Touka
-MARIADB= jdbc:mariadb://localhost:3306/merequetengue
-MDBUSER= root
-MDBPASS= adre1234
-    *
-    * */
     Properties properties = new Properties();
-    File file = new File("src/main/resources/server.properties");
+    File file;
+        //File file = new File("/home/ubuntu/app/server.properties");
+        //File file = new File("src/main/resources/server.properties");
     //Si añades algún atributo, describe añadiendo a este string qué valores debe aceptar
     String comment =
             "#ARCHIVO DE CONFIG DE SERVER GREENIT API\n" +
@@ -28,6 +22,7 @@ MDBPASS= adre1234
             "#MDBPASS -> La contraseña para mariaDB\n\n\n";
     public Config(){
         try {
+            if(System.getProperty("os.name").equals("Mac OS X") || System.getProperty("os.name").equals("Windows 10") || System.getProperty("os.name").equals("Windows 11")){file = new File("src/main/resources/server.properties");}else{file = new File("/home/ubuntu/app/server.properties");}
             loadProperties();
         } catch (IOException e) {
             throw new RuntimeException(e);
