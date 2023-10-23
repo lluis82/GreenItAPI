@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,10 +28,10 @@ public class StepController {
     }
 
     @GetMapping("/prevstep")
-    public Step getStepByPrevId(@RequestParam int previd) {
-        Optional<Step> step = StepService.getStepByPrevId(previd);
+    public List<Step> getStepByPrevId(@RequestParam int previd) {
+        Optional<List<Step>> step = StepService.getStepByPrevId(previd);
         if(step == null) return null;
-        return (Step) step.orElse(null);
+        return (List<Step>) step.orElse(null);
     }
 
     @GetMapping("/commit")

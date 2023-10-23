@@ -29,7 +29,7 @@ public class PostService {
         try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
                     FROM posts p
-                    WHERE creator like (SELECT u.id FROM Users u WHERE u.userName like ?)
+                    WHERE creator like (SELECT u.id FROM users u WHERE u.userName like ?)
                 """)) {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();

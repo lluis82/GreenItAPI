@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,8 +18,9 @@ public class StepService {
     private static Connection connection;
     private static Config config = new Config();
 
-    public static Optional<Step> getStepByPrevId(int stepId) {
-        Optional<Step> optional;
+    public static Optional<List<Step>> getStepByPrevId(int stepId) {
+        Optional<List<Step>> optional;
+        List<Step> sol= new ArrayList<>();
         Step step = null;
         connection = mariadbConnect.mdbconn();
 
@@ -36,12 +39,13 @@ public class StepService {
                         int prevStepID = resultSet.getInt("previousStep");
                         if (prevStepID == 0) step = new Step(desc, id); else
                             step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null));
+                        sol.add(step);
                     } while (resultSet.next());
                 }
             } catch (Exception e) {
                 System.out.println("Error al recuperar info de la BD");
             }
-            optional = Optional.of(step);
+            optional = Optional.of(sol);
         } else {
             try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
@@ -58,12 +62,13 @@ public class StepService {
                         int prevStepID = resultSet.getInt("previousStep");
                         if (prevStepID == 0) step = new Step(desc, id); else
                             step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null));
+                        sol.add(step);
                     } while (resultSet.next());
                 }
             } catch (Exception e) {
                 System.out.println("Error al recuperar info de la BD");
             }
-            optional = Optional.of(step);
+            optional = Optional.of(sol);
         }
         return optional;
     }
