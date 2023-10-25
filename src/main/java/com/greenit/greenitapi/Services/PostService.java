@@ -45,7 +45,8 @@ public class PostService {
 
                     }catch(Exception e){}
                     String servername = resultSet.getString("serverName");
-                    post = new Post(creator, firstStep, id, servername);
+                    String image = resultSet.getString("image");
+                    post = new Post(creator, firstStep, id, servername, image);
                     sol.add(post);
                 } while (resultSet.next());
             }
@@ -57,22 +58,24 @@ public class PostService {
 
     }
 
-    public static String publishPost(String username) {
+    public static String publishPost(String username, String description, String image) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""
-                    INSERT INTO posts (servername, firstStep, creator) VALUES (?, null, (SELECT u.id from users u where u.username like ?))
+                    INSERT INTO posts (servername, firstStep, creator, description, image) VALUES (?, null, (SELECT u.id from users u where u.username like ?), ?, ?)
                 """)) {
             statement.setString(1,config.getSrvIp());
             statement.setString(2,username);
+            statement.setString(3,description);
+            statement.setString(4,image);
             statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
-            return config.getSrvName() + " FAIL";
+            return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
         }
         return config.getSrvName() + " OK";
     }
 
-    public static Optional<List<Post>> getAllPosts(){
+    public static Optional<List<Post>> getAllPostsPaged(int page){
         Optional<List<Post>> optional;
         Post post = null;
         List<Post> sol = new ArrayList<>();
@@ -81,7 +84,10 @@ public class PostService {
         try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
                     FROM posts p
+                    ORDER BY p.id
+                    LIMIT ?,5
                 """)) {
+            statement.setInt(1,(5*page)-5);
             ResultSet resultSet = statement.executeQuery();
 
             if(resultSet.next()== false){return null;} else {
@@ -95,7 +101,8 @@ public class PostService {
 
                     }catch(Exception e){}
                     String servername = resultSet.getString("serverName");
-                    post = new Post(creator, firstStep, id, servername);
+                    String image = resultSet.getString("image");
+                    post = new Post(creator, firstStep, id, servername, image);
                     sol.add(post);
                 } while (resultSet.next());
             }

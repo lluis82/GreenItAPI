@@ -5,16 +5,20 @@ public class Step {
     private Step previousStep;
     private String description;
 
-    public Step(String description, int id, Step previousStep){
+    private String image;
+
+    public Step(String description, int id, Step previousStep, String image){
         this.previousStep = previousStep;
         this.description = description;
         this.id = id;
+        this.image = image;
     }
 
-    public Step(String description, int id){
+    public Step(String description, int id, String image){
         this.previousStep = null;
         this.description = description;
         this.id = id;
+        this.image = image;
     }
 
     public void setId(int id) {
@@ -41,8 +45,10 @@ public class Step {
         return id;
     }
 
-    //private String image;
-    //private List<Comment> comments;
+    public String getImage() {
+        return image;
+    }
+//private List<Comment> comments;
 
     /*
     La id es un string con un formato muy concreto:
