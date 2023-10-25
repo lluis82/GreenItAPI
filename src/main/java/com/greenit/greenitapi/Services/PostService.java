@@ -72,5 +72,40 @@ public class PostService {
         return config.getSrvName() + " OK";
     }
 
+    public static Optional<List<Post>> getAllPosts(){
+        Optional<List<Post>> optional;
+        Post post = null;
+        List<Post> sol = new ArrayList<>();
+        connection = mariadbConnect.mdbconn();
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM posts p
+                """)) {
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    Step firstStep = null;
+                    int id = resultSet.getInt("id");
+                    try {
+                        int idstep = resultSet.getInt("firstStep");
+                        firstStep = StepService.getStepById(idstep).orElse(null);
+
+                    }catch(Exception e){}
+                    String servername = resultSet.getString("serverName");
+                    post = new Post(creator, firstStep, id, servername);
+                    sol.add(post);
+                } while (resultSet.next());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+        }
+        optional = Optional.of(sol);
+        return optional;
+
+    }
+
 
 }

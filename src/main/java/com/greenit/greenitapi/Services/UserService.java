@@ -43,6 +43,36 @@ public class UserService {
         return optional;
     }
 
+    public static Optional<User> getUserById(int id) {
+        Optional<User> optional;
+        User user = null;
+        connection = mariadbConnect.mdbconn();
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM users u
+                    WHERE u.id like ?
+                """)) {
+
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    String name = resultSet.getString("userName");
+                    String email = resultSet.getString("email");
+                    String password = resultSet.getString("password");
+                    System.out.println(name + " " + email + " " + password + " " + config.getSrvName());
+                    user = new User(name, email, password, config.getSrvName());
+                } while (resultSet.next());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+        }
+        optional = Optional.of(user);
+        return optional;
+    }
+
     public static Optional<User> getUserByName(String username) {
         Optional<User> optional;
         User user = null;
