@@ -29,16 +29,16 @@ public class PostController {
         return (List<Post>) post.orElse(null);
     }
 
-    @GetMapping("/getAllPosts")
-    public List<Post> getAllPosts() {
-        Optional<List<Post>> post = postService.getAllPosts();
+    @GetMapping("/postsPaged")
+    public List<Post> getAllPosts(@RequestParam int page) {
+        Optional<List<Post>> post = postService.getAllPostsPaged(page);
         if(post == null) return null;
         return (List<Post>) post.orElse(null);
     }
 
     @GetMapping("/publish")
-    public String publishPost(@RequestParam String username) {
-        String sol = postService.publishPost(username);
+    public String publishPost(@RequestParam String username, @RequestParam String description, @RequestParam String image) {
+        String sol = postService.publishPost(username, description, image);
         return sol;
     }
 }

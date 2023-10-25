@@ -86,7 +86,7 @@ public class ServerService {
             ResultSet resultSet = statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
-            return config.getSrvName() + " FAIL";
+            return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
         }
         return config.getSrvName() + " OK";
     }

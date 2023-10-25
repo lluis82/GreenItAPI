@@ -35,8 +35,8 @@ public class StepController {
     }
 
     @GetMapping("/commit")
-    public String publishPost(@RequestParam int prevStepId, @RequestParam Boolean isFirst, @RequestParam String description, @RequestParam int postid) {
-        String sol = stepService.publishStep(prevStepId, isFirst, description, postid);
+    public String publishPost(@RequestParam int prevStepId, @RequestParam Boolean isFirst, @RequestParam String description, @RequestParam int postid, @RequestParam String image) {
+        String sol = stepService.publishStep(prevStepId, isFirst, description, postid, image);
         return sol;
     }
 }

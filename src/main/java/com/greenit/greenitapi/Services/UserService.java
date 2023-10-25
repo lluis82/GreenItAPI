@@ -62,7 +62,6 @@ public class UserService {
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
-                    System.out.println(name + " " + email + " " + password + " " + config.getSrvName());
                     user = new User(name, email, password, config.getSrvName());
                 } while (resultSet.next());
             }
@@ -92,7 +91,6 @@ public class UserService {
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
-                    System.out.println(name + " " + email + " " + password + " " + config.getSrvName());
                     user = new User(name, email, password, config.getSrvName());
                 } while (resultSet.next());
             }
@@ -106,6 +104,7 @@ public class UserService {
 
     public static String register(String emailIn, String password, String username) {
         connection = mariadbConnect.mdbconn();
+        if(getUserByName(username) != null){return config.getSrvName() + " FAIL, ya existe un usuario con ese nombre";}
         try (PreparedStatement statement = connection.prepareStatement("""
                     INSERT INTO users (email, userName, password) VALUES (?, ?, ?)
                 """)) {
@@ -115,7 +114,7 @@ public class UserService {
             statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
-            return config.getSrvName() + " FAIL";
+            return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
         }
         return config.getSrvName() + " OK";
     }

@@ -37,8 +37,9 @@ public class StepService {
                         String desc = resultSet.getString("description");
                         int id = resultSet.getInt("id");
                         int prevStepID = resultSet.getInt("previousStep");
-                        if (prevStepID == 0) step = new Step(desc, id); else
-                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null));
+                        String image = resultSet.getString("image");
+                        if (prevStepID == 0) step = new Step(desc, id, image); else
+                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null) , image);
                         sol.add(step);
                     } while (resultSet.next());
                 }
@@ -60,8 +61,9 @@ public class StepService {
                         String desc = resultSet.getString("description");
                         int id = resultSet.getInt("id");
                         int prevStepID = resultSet.getInt("previousStep");
-                        if (prevStepID == 0) step = new Step(desc, id); else
-                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null));
+                        String image = resultSet.getString("image");
+                        if (prevStepID == 0) step = new Step(desc, id, image); else
+                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), image);
                         sol.add(step);
                     } while (resultSet.next());
                 }
@@ -93,8 +95,9 @@ public class StepService {
                     String desc = resultSet.getString("description");
                     int id = resultSet.getInt("id");
                     int prevStepID = resultSet.getInt("previousStep");
-                    if (prevStepID == 0) step = new Step(desc, id); else
-                        step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null));
+                    String image = resultSet.getString("image");
+                    if (prevStepID == 0) step = new Step(desc, id, image); else
+                        step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), image);
                 } while (resultSet.next());
             }
         } catch (Exception e) {
@@ -105,13 +108,14 @@ public class StepService {
     }
 
 
-    public static String publishStep(int prevStepId, Boolean isFirst, String description, int postId) {
+    public static String publishStep(int prevStepId, Boolean isFirst, String description, int postId, String image) {
         connection = mariadbConnect.mdbconn();
 
         try (PreparedStatement statement = connection.prepareStatement("""
-                    INSERT INTO step (description, previousStep) VALUES (?, null)
+                    INSERT INTO step (description, previousStep, image) VALUES (?, null, ?)
                 """)) {
             statement.setString(1,description);
+            statement.setString(2,image);
             statement.executeQuery();
 
             if(isFirst){
@@ -123,7 +127,7 @@ public class StepService {
                     statement2.executeQuery();
                 } catch (Exception e) {
                     System.out.println("Error al recuperar info de la BD");
-                    return config.getSrvName() + " FAIL";
+                    return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
                 }
             }else{
                 try (PreparedStatement statement2 = connection.prepareStatement("""
@@ -134,12 +138,12 @@ public class StepService {
                     statement2.executeQuery();
                 } catch (Exception e) {
                     System.out.println("Error al recuperar info de la BD");
-                    return config.getSrvName() + " FAIL";
+                    return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
                 }
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
-            return config.getSrvName() + " FAIL";
+            return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
         }
         return config.getSrvName() + " OK";
     }
