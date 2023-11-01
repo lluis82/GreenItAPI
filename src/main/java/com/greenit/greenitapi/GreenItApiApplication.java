@@ -14,9 +14,15 @@ public class GreenItApiApplication {
         SpringApplication.run(GreenItApiApplication.class, args);
         System.out.println("GreenIt API Server " + config.getSrvName());
 
+
         //ASCII Art
+        Scanner input;
         try {
-            Scanner input = new Scanner(new File("src/main/resources/art"));
+            try {
+                input = new Scanner(new File("src/main/resources/art"));
+            }catch(Exception e){
+                input = new Scanner(new File("/home/ubuntu/app/art"));
+            }
             while (input.hasNextLine()) {
                 System.out.println(input.nextLine());
             }
