@@ -1,5 +1,6 @@
 package com.greenit.greenitapi;
 
+import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.enigma;
 import org.springframework.boot.SpringApplication;
@@ -35,5 +36,6 @@ public class GreenItApiApplication {
         System.out.println(enigma.encode(config.getSrvName(), config.getSrvIp()));
         System.out.println(enigma.decode("Touka",enigma.encode(config.getSrvName(), config.getSrvIp())));
         System.out.println("Corriendo sobre: " + System.getProperty("os.name"));
+        Base64machine.decode2();
     }
 }

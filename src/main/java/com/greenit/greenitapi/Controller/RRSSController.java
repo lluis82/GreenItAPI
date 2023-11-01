@@ -22,11 +22,7 @@ public class RRSSController {
 
     @GetMapping(value = "/rrss", produces = MediaType.TEXT_HTML_VALUE)
     public String viewRRSSembed() {
-        return rrssService.getFile();
-                /*
-        return "<html>\n" + "<header><title>Welcome</title></header>\n" +
-                "<body>\n" + "Hello world\n" + "</body>\n" + "</html>";
-                 */
+        return rrssService.getHTMLFile();
     }
 
     @GetMapping("/getrizna")
@@ -34,6 +30,15 @@ public class RRSSController {
     public ResponseEntity<InputStreamResource> getriznabig() {
         //MediaType contentType = MediaType.IMAGE_PNG;
         InputStream in = getClass().getResourceAsStream("/html/rizna smol.png");
+        //return ResponseEntity.ok().contentType(contentType).body(new InputStreamResource(in));
+        return ResponseEntity.ok().body(new InputStreamResource(in));
+    }
+
+    @GetMapping("/getOutput")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> getoutimg() {
+        //MediaType contentType = MediaType.IMAGE_PNG;
+        InputStream in = getClass().getResourceAsStream("/out");
         //return ResponseEntity.ok().contentType(contentType).body(new InputStreamResource(in));
         return ResponseEntity.ok().body(new InputStreamResource(in));
     }
