@@ -5,20 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="http://localhost:8080/getrizna">
     <title>Rizna Web View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-align: center;
+            padding: 1em 0;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 1em;
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="email"],
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
+<header>
+    <h1>Rizna Web View</h1>
+</header>
 <img src="http://localhost:8080/getOutput" alt="a" width="252" height="184">
-<h1>Register</h1>
 <form action="http://localhost:8080/register" method="get">
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required>
-    <br>
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required>
-    <br>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
-    <br>
     <input type="submit" value="Register">
 </form>
 </body>
