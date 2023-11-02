@@ -38,18 +38,10 @@ public class Base64machine {
 
         if(Objects.equals(imgbase64, "") || imgbase64 == null){return "https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png";}
         if(imgbase64.contains("http://") || imgbase64.contains("https://")){return imgbase64;}
-        if(Config.inDebug()){
-            if(postid != 0)
-                return "http://localhost:8080/getimgfrompostbyid?postid=" + postid;
-            if(stepid != 0)
-                return  "http://localhost:8080/getimgfromstepbyid?stepid=" + stepid;
-            return  "http://localhost:8080/getimgfromprofilebyusername?username=" + username;
-        }else{
             if(postid != 0)
                 return "http://" + config.getSrvIp() + "/getimgfrompostbyid?postid=" + postid;
             if(stepid != 0)
                 return  "http://" + config.getSrvIp() + "/getimgfromstepbyid?stepid=" + stepid;
             return  "http://" + config.getSrvIp() + "/getimgfromprofilebyusername?username=" + username;
-        }
     }
 }
