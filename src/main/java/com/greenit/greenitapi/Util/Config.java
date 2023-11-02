@@ -58,6 +58,7 @@ public class Config {
     }
 
     public String getSrvIp(){
+        if(inDebug()) return "localhost:8080";
         return (String)properties.get("PUBLICIP");
     }
     public void setSrvIp(String newIP){
@@ -125,23 +126,7 @@ public class Config {
         if(System.getProperty("os.name") == "Linux"){return false;} else return true;
     }
     public static String getHTMLLocation(){if(inDebug()){return "src/main/resources/html/";}else return "/home/ubuntu/app/html/";}
-    public static String getHTMLrootLocation(){if(inDebug()){return "/html/";}else return "/home/ubuntu/app/html/";}
-    public static String getHTMLrootImgLocation(){if(inDebug()){return "/";}else return "/home/ubuntu/app/html/";}
-    public static String getResourcesLocation(){if(inDebug()){return "src/main/resources/";}else return "/home/ubuntu/app/html/";}
-
-    //METODOS DE IMAGENES (LEGADO)
-    public String getIMGURI(String username){
-        return (String)properties.get(username);
-    }
-
-    public void setIMGURI(String username, String URI){
-        properties.setProperty(username,URI);
-        try {
-            saveProperties();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static String getResourcesLocation(){if(inDebug()){return "src/main/resources/";}else return "/home/ubuntu/app/";}
 
     //endregion
 

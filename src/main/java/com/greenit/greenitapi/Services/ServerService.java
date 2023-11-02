@@ -35,6 +35,7 @@ public class ServerService {
                 Boolean isSeed = resultSet.getBoolean("isSeed");
                 server = new Server(name, ip, isSeed);
                 sol.add(server);
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -64,6 +65,7 @@ public class ServerService {
                     Boolean isSeed = resultSet.getBoolean("isSeed");
                     server = new Server(name, ip, isSeed);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -84,6 +86,7 @@ public class ServerService {
                 statement.setInt(3,1);
             statement.setInt(3,0);
             ResultSet resultSet = statement.executeQuery();
+            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();

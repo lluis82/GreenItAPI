@@ -49,11 +49,13 @@ public class PostService {
                     post = new Post(creator, firstStep, id, servername, image, description);
                     sol.add(post);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(sol);
+
         return optional;
     }
 
@@ -84,6 +86,7 @@ public class PostService {
                     String description = resultSet.getString("description");
                     post = new Post(creator, firstStep, id, servername, image, description);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -102,6 +105,7 @@ public class PostService {
             statement.setString(3,description);
             statement.setString(4,image);
             statement.executeQuery();
+            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
@@ -140,6 +144,7 @@ public class PostService {
                     post = new Post(creator, firstStep, id, servername, image, description);
                     sol.add(post);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");

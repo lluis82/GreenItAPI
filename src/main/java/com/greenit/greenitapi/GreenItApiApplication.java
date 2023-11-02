@@ -1,7 +1,6 @@
 package com.greenit.greenitapi;
 
 import com.greenit.greenitapi.Util.Config;
-import com.greenit.greenitapi.Util.enigma;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.File;
@@ -25,11 +24,6 @@ public class GreenItApiApplication {
         } catch (Exception e) {
             System.out.println("No se pudo encontrar el ASCII art para el nombre del server");
         }
-
-        //Numeros secretos de ip
-        System.out.println("Números secretos para el servidor " + config.getSrvName());
-        System.out.println(enigma.encode(config.getSrvName(), config.getSrvIp()));
-        System.out.println(enigma.decode("Touka",enigma.encode(config.getSrvName(), config.getSrvIp())));
         System.out.println("Corriendo sobre: " + System.getProperty("os.name"));
     }
 }
