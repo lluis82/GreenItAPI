@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenIt Embedded</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-align: center;
+            padding: 1em 0;
+        }
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1em;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .profile-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1em;
+        }
+        .container {
+            flex: 1;
+            min-width: calc(33.33% - 1em);
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .container img {
+            width: 100%;
+            height: auto;
+        }
+        .container button {
+            width: 100%;
+            padding: 10px 0;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Profile Page</h1>
+</header>
+<main>
+    <h1>Profile Name</h1>
+    <!-- Profile -->
+    <div class="profile-container">
+    <div class="container">
+        <img src="http://localhost:8080/getOutput" alt="Image 3">
+        <p>This is some text for container 1.</p>
+    </div>
+    <div class="container">
+        <p>This is some text for container 1.</p>
+    </div>
+    </div>
+    <div class="profile-container">
+        <!-- Container 1 -->
+        <div class="container">
+            <img src="http://localhost:8080/getrizna" alt="Image 1">
+            <p>This is some text for container 1.</p>
+            <button onclick="location.href='http://localhost:8080/buttonAction1'">Button 1</button>
+        </div>
+        <!-- Container 2 -->
+        <div class="container">
+            <img src="http://localhost:8080/getrizna" alt="Image 2">
+            <p>This is some text for container 1.</p>
+            <button onclick="location.href='http://localhost:8080/buttonAction2'">Button 2</button>
+        </div>
+        <!-- Container 3 -->
+        <div class="container">
+            <img src="http://localhost:8080/getOutput" alt="Image 3">
+            <p>This is some text for container 1.</p>
+            <button onclick="location.href='http://localhost:8080/buttonAction3'">Button 3</button>
+        </div>
+        <!-- Container 4 -->
+        <div class="container">
+            <img src="http://localhost:8080/getOutput" alt="Image 3">
+            <p>This is some text for container 1.</p>
+            <button onclick="location.href='http://localhost:8080/buttonAction3'">Button 3</button>
+        </div>
+        <!-- Add more containers as needed -->
+    </div>
+</main>
+</body>
+</html>

@@ -1,8 +1,8 @@
 package com.greenit.greenitapi.Services;
 
+import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Util.Config;
 import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.sql.Connection;
 import java.util.Scanner;
@@ -11,33 +11,59 @@ import java.util.Scanner;
 public class RRSSService {
     private static Connection connection;
     private static Config config = new Config();
-
-    public static String getHTMLFile(){
+    private static String getHTMLFile(String filename, int postid, int stepid, String username){
         String sol = "";
         try {
-            Scanner input = new Scanner(new File(Config.getHTMLLocation() + "tempPost.html"));
+            Scanner input = new Scanner(new File(Config.getHTMLLocation() + filename));
             while (input.hasNextLine()) {
-                //hacer comprobaciones por si tienes que sustituir por imagenes etc?
-                String inline = input.nextLine();
-                String inline2 = process(inline);
-                sol += inline2 + "\n";
+                sol += process(input.nextLine(), postid, stepid, username) + "\n";
             }
         } catch (Exception e) {
-            return "No se pudo encontrar el html template para el nombre del server";
+            return "No se pudo encontrar el html template para el nombre del server" + e;
         }
         return sol;
     }
-    private static String process(String inline){
-        //System.out.println(inline);
+    public static String getHTMLprofileFile(String username){
+        return getHTMLFile("tempProfile.html", 0,0,username);
+    }
+    public static String getHTMLpostFile(int postid){
+        return getHTMLFile("tempPost.html", postid, 0 ,"");
+    }
+    public static String getHTMLstepFile(int stepid){
+        return getHTMLFile("tempStep.html",0,stepid,"");
+    }
+    private static String process(String inline, int postid, int stepid, String username){
         String sol = inline;
-        //esto hay que hacerlo por separado o con ifs o switch o algoç
-        if(inline.trim().startsWith("<title>"))
-        sol = inline.replaceAll("<title>.*</title>", "<title>GreenIT Post</title>");
-        if(inline.trim().startsWith("<h2>"))
-        sol = inline.replaceAll("<h2>.*</h2>", "<h2>GreenIT Post</h2>");
-        if(inline.trim().startsWith("<h1>"))
-        sol = inline.replaceAll("<h1>.*</h1>", "<h1>Titulo del post</h1>");
-        //System.out.println(sol);
+        //region POSTS
+        if(inline.trim().contains("POST_HEADER"))
+            sol = inline.replaceAll("<h2>POST_HEADER</h2>", "<h2>" + "</h2>");//borrar el texto de arriba
+        if(inline.trim().contains("POST_TITLE"))
+            sol = inline.replaceAll("<h1>POST_TITLE</h1>", "<h2>" + PostService.getPostById(postid).orElse(null).getCreator().getDisplayName() + "'s post</h2>");
+        if(inline.trim().contains("POST_DESCRIPTION"))
+            sol = inline.replaceAll("<p>POST_DESCRIPTION</p>", "<p>" + PostService.getPostById(postid).orElse(null).getDescription() + "</p>");
+        if(inline.trim().contains("POST_IMAGE"))
+            sol = inline.replaceAll("POST_IMAGE", "<img src=\"" + PostService.getPostById(postid).orElse(null).getImage() + "\" alt=\"Post Image\">");
+        if(inline.trim().contains("POST_BUTTON")) {
+            if(PostService.getPostById(postid).orElse(null).getFirstStep() != null)
+            sol = inline.replaceAll("POST_BUTTON",
+                    "<button onclick=\"location.href='http://localhost:8080/rsssstep?stepid=" + PostService.getPostById(postid).orElse(null).getFirstStep().getId() + "'\">Go to first step</button>");
+            else sol = "";// si no tiene first step borramos el indicador
+        }
+        //endregion
+
+        //region STEPS
+
+        if(inline.trim().contains("POST_HEADER"))
+            sol = inline.replaceAll("<h2>POST_HEADER</h2>", "<h2>" + "</h2>");
+        //endregion
+
+        //region PROFILES
+
+        if(inline.trim().contains("POST_HEADER"))
+            sol = inline.replaceAll("<h2>POST_HEADER</h2>", "<h2>" + "</h2>");
+        //endregion
+
+
         return sol;
     }
 }
