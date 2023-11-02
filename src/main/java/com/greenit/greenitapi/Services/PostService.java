@@ -1,7 +1,6 @@
 package com.greenit.greenitapi.Services;
 
 import com.greenit.greenitapi.Entities.Post;
-import com.greenit.greenitapi.Entities.Server;
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Util.Config;
@@ -111,8 +110,5 @@ public class PostService {
         }
         optional = Optional.of(sol);
         return optional;
-
     }
-
-
 }

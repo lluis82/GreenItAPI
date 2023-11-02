@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-align: center;
+            padding: 1em 0;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+        article {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1em;
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        p {
+            margin: 0 0 1em 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h2>Blog Post</h2>
+</header>
+<article>
+    <h1>Post Title</h1>
+    <img src="http://localhost:8080/getOutput" alt="Post Image">
+    <p>This is a description of the blog post. It can be as long or as short as you want it to be.</p>
+    <button onclick="location.href='http://localhost:8080/getPostRRSS?postid=1'">Next Step</button>
+</article>
+</body>
+</html>

@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Scanner;
@@ -25,7 +24,7 @@ public class Base64machine {
         } catch (IOException e) {
             System.out.println("hubo un problema decodificando la imagen");
         }
-        File out = new File("/hola.png");
+        File out = new File( Config.getHTMLrootImgLocation() + "hola.png");
         try {
             ImageIO.write(image, "png", out);
         } catch (IOException e) {
@@ -36,18 +35,18 @@ public class Base64machine {
 
     public static String decode2(){
         BufferedImage image = null;
-        File in = new File("src/main/resources/base64enc");
+        File in = new File( Config.getResourcesLocation() + "base64enc");
         byte[] imageByte;
         try {
             imageByte = Base64.getDecoder().decode(new Scanner(in).nextLine());
             var bis = new ByteArrayInputStream(imageByte);
             image = ImageIO.read(bis);
             bis.close();
-            File out = new File("src/main/resources/out");
+            File out = new File(Config.getResourcesLocation() + "out");
             ImageIO.write(image, "PNG", out);
         } catch (Exception e) {
             System.out.println("hubo un problema decodificando base64");
         }
-        return "src/main/resources/out";
+        return  Config.getResourcesLocation() + "out";
     }
 }

@@ -1,6 +1,5 @@
 package com.greenit.greenitapi;
 
-import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.enigma;
 import org.springframework.boot.SpringApplication;
@@ -19,11 +18,7 @@ public class GreenItApiApplication {
         //ASCII Art
         Scanner input;
         try {
-            try {
-                input = new Scanner(new File("src/main/resources/art"));
-            }catch(Exception e){
-                input = new Scanner(new File("/home/ubuntu/app/art"));
-            }
+            input = new Scanner(new File(Config.getResourcesLocation() + "art"));
             while (input.hasNextLine()) {
                 System.out.println(input.nextLine());
             }
@@ -36,6 +31,5 @@ public class GreenItApiApplication {
         System.out.println(enigma.encode(config.getSrvName(), config.getSrvIp()));
         System.out.println(enigma.decode("Touka",enigma.encode(config.getSrvName(), config.getSrvIp())));
         System.out.println("Corriendo sobre: " + System.getProperty("os.name"));
-        Base64machine.decode2();
     }
 }

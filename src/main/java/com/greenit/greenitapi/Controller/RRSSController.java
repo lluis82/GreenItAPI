@@ -1,6 +1,7 @@
 package com.greenit.greenitapi.Controller;
 
 import com.greenit.greenitapi.Services.RRSSService;
+import com.greenit.greenitapi.Util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -28,18 +29,14 @@ public class RRSSController {
     @GetMapping("/getrizna")
     @ResponseBody
     public ResponseEntity<InputStreamResource> getriznabig() {
-        //MediaType contentType = MediaType.IMAGE_PNG;
-        InputStream in = getClass().getResourceAsStream("/html/rizna smol.png");
-        //return ResponseEntity.ok().contentType(contentType).body(new InputStreamResource(in));
+        InputStream in = getClass().getResourceAsStream(Config.getHTMLrootLocation() + "rizna smol.png");
         return ResponseEntity.ok().body(new InputStreamResource(in));
     }
 
     @GetMapping("/getOutput")
     @ResponseBody
     public ResponseEntity<InputStreamResource> getoutimg() {
-        //MediaType contentType = MediaType.IMAGE_PNG;
-        InputStream in = getClass().getResourceAsStream("/out");
-        //return ResponseEntity.ok().contentType(contentType).body(new InputStreamResource(in));
+        InputStream in = getClass().getResourceAsStream(Config.getHTMLrootImgLocation() + "out");
         return ResponseEntity.ok().body(new InputStreamResource(in));
     }
 
