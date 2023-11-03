@@ -1,7 +1,6 @@
 package com.greenit.greenitapi.Services;
 
 import com.greenit.greenitapi.Entities.Post;
-import com.greenit.greenitapi.Entities.Server;
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Util.Config;
@@ -46,16 +45,54 @@ public class PostService {
                     }catch(Exception e){}
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
-                    post = new Post(creator, firstStep, id, servername, image);
+                    String description = resultSet.getString("description");
+                    post = new Post(creator, firstStep, id, servername, image, description);
                     sol.add(post);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(sol);
-        return optional;
 
+        return optional;
+    }
+
+    public static Optional<Post> getPostById(int id){
+        Optional<Post> optional;
+        Post post = null;
+        connection = mariadbConnect.mdbconn();
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM posts p
+                    WHERE id = ?
+                    LIMIT 1
+                """)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    Step firstStep = null;
+                    try {
+                        int idstep = resultSet.getInt("firstStep");
+                        firstStep = StepService.getStepById(idstep).orElse(null);
+                    }catch(Exception e){}
+                    String servername = resultSet.getString("serverName");
+                    String image = resultSet.getString("image");
+                    String description = resultSet.getString("description");
+                    post = new Post(creator, firstStep, id, servername, image, description);
+                } while (resultSet.next());
+                connection.close();
+            }
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+        }
+        optional = Optional.of(post);
+        return optional;
     }
 
     public static String publishPost(String username, String description, String image) {
@@ -68,6 +105,7 @@ public class PostService {
             statement.setString(3,description);
             statement.setString(4,image);
             statement.executeQuery();
+            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
@@ -102,17 +140,16 @@ public class PostService {
                     }catch(Exception e){}
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
-                    post = new Post(creator, firstStep, id, servername, image);
+                    String description = resultSet.getString("description");
+                    post = new Post(creator, firstStep, id, servername, image, description);
                     sol.add(post);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(sol);
         return optional;
-
     }
-
-
 }

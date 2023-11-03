@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenIt Embedded</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-align: center;
+            padding: 1em 0;
+        }
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1em;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .profile-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1em;
+        }
+        .container {
+            flex: 1;
+            min-width: calc(33.33% - 1em);
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .container img {
+            width: 100%;
+            height: auto;
+        }
+        .container button {
+            width: 100%;
+            padding: 10px 0;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1></h1>
+</header>
+<main>
+    <h1>PROFILE_NAME</h1>
+    <div class="profile-container">
+    <div class="container">
+        PROFILE_IMAGE
+        <p>PROFILE_USERNAME</p>
+    </div>
+    <div class="container">
+        <p>PROFILE_DESCRIPTION</p>
+    </div>
+    </div>
+    <div class="profile-container">
+PROFILE_CONTAINER
+    </div>
+</main>
+</body>
+</html>

@@ -33,8 +33,11 @@ public class UserService {
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
-                    user = new User(name, email, password, config.getSrvName());
+                    String image = resultSet.getString("image");
+                    String description = resultSet.getString("description");
+                    user = new User(name, email, password, config.getSrvName(), image, description);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -62,8 +65,11 @@ public class UserService {
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
-                    user = new User(name, email, password, config.getSrvName());
+                    String image = resultSet.getString("image");
+                    String description = resultSet.getString("description");
+                    user = new User(name, email, password, config.getSrvName(), image, description);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -91,8 +97,11 @@ public class UserService {
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
-                    user = new User(name, email, password, config.getSrvName());
+                    String image = resultSet.getString("image");
+                    String description = resultSet.getString("description");
+                    user = new User(name, email, password, config.getSrvName(), image, description);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -112,6 +121,7 @@ public class UserService {
             statement.setString(2,username);
             statement.setString(3,password);
             statement.executeQuery();
+            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();

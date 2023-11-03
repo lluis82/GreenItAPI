@@ -5,14 +5,16 @@ public class User {
     private String email;
     private String password;
     private String serverName;//el server donde reside la info del usuario
+    private String description;
+    private String image;
 
-    //TODO: hacer metodos para registrar usuarios en la BD
-
-    public User(String displayName, String email, String password, String serverName){
+    public User(String displayName, String email, String password, String serverName, String image, String description){
         this.displayName=displayName;
         this.email=email;
         this.password=password;
         this.serverName=serverName;
+        this.image= image;
+        this.description = description;
     }
 
     public String getEmail() {
@@ -42,7 +44,8 @@ public class User {
     public String getServerName() {
         return serverName;
     }
-
+    public String getImage(){return image;}
+    public String getDescription(){return description;}
     public void setServerName(String serverName) {
         this.serverName = serverName;
     }

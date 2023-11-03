@@ -10,8 +10,6 @@ public class Config {
 
     Properties properties = new Properties();
     File file;
-        //File file = new File("/home/ubuntu/app/server.properties");
-        //File file = new File("src/main/resources/server.properties");
     //Si añades algún atributo, describe añadiendo a este string qué valores debe aceptar
     String comment =
             "#ARCHIVO DE CONFIG DE SERVER GREENIT API\n" +
@@ -22,7 +20,11 @@ public class Config {
             "#MDBPASS -> La contraseña para mariaDB\n\n\n";
     public Config(){
         try {
-            if(System.getProperty("os.name").equals("Mac OS X") || System.getProperty("os.name").equals("Windows 10") || System.getProperty("os.name").equals("Windows 11")){file = new File("src/main/resources/server.properties");}else{file = new File("/home/ubuntu/app/server.properties");}
+            if(System.getProperty("os.name").equals("Mac OS X")   ||
+               System.getProperty("os.name").equals("Windows 10") ||
+               System.getProperty("os.name").equals("Windows 11"))
+                {file = new File("src/main/resources/server.properties");}
+            else{file = new File("/home/ubuntu/app/server.properties");}
             loadProperties();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -56,6 +58,7 @@ public class Config {
     }
 
     public String getSrvIp(){
+        if(inDebug()) return "localhost:8080";
         return (String)properties.get("PUBLICIP");
     }
     public void setSrvIp(String newIP){
@@ -118,20 +121,12 @@ public class Config {
         properties.load(fi);
         fi.close();
     }
-
-    //METODOS DE IMAGENES (LEGADO)
-    public String getIMGURI(String username){
-        return (String)properties.get(username);
+    //HAY QUE TOCAR ESTO PARA QUE EN LINUX SEA DIFERENTE PERO NO LO VOY A HACER AHORA
+    public static Boolean inDebug(){
+        if(System.getProperty("os.name") == "Linux"){return false;} else return true;
     }
-
-    public void setIMGURI(String username, String URI){
-        properties.setProperty(username,URI);
-        try {
-            saveProperties();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static String getHTMLLocation(){if(inDebug()){return "src/main/resources/html/";}else return "/home/ubuntu/app/html/";}
+    public static String getResourcesLocation(){if(inDebug()){return "src/main/resources/";}else return "/home/ubuntu/app/";}
 
     //endregion
 

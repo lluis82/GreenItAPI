@@ -6,13 +6,15 @@ public class Post {
     private int id;
     private String serverName;
     private String image;
+    private String description;
 
-    public Post(User creator, Step firstStep, int id, String serverName, String image){
+    public Post(User creator, Step firstStep, int id, String serverName, String image, String description){
         this.creator = creator;
         this.id = id;
         this.firstStep = firstStep;
         this.serverName = serverName;
         this.image = image;
+        this.description = description;
     }
 
     public Step getFirstStep() {
@@ -38,6 +40,9 @@ public class Post {
     }
     public String getImage() {
         return image;
+    }
+    public String getDescription() {
+        return description;
     }
     public int getId() {
         return id;

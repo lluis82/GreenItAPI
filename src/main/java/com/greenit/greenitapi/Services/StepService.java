@@ -42,6 +42,7 @@ public class StepService {
                             step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null) , image);
                         sol.add(step);
                     } while (resultSet.next());
+                    connection.close();
                 }
             } catch (Exception e) {
                 System.out.println("Error al recuperar info de la BD");
@@ -66,6 +67,7 @@ public class StepService {
                             step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), image);
                         sol.add(step);
                     } while (resultSet.next());
+                    connection.close();
                 }
             } catch (Exception e) {
                 System.out.println("Error al recuperar info de la BD");
@@ -99,6 +101,7 @@ public class StepService {
                     if (prevStepID == 0) step = new Step(desc, id, image); else
                         step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), image);
                 } while (resultSet.next());
+                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -141,6 +144,7 @@ public class StepService {
                     return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
                 }
             }
+            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
