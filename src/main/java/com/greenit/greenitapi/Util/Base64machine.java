@@ -1,11 +1,16 @@
 package com.greenit.greenitapi.Util;
 
+import com.greenit.greenitapi.Entities.Post;
+import com.greenit.greenitapi.Entities.Step;
+import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Services.PostService;
 import com.greenit.greenitapi.Services.StepService;
 import com.greenit.greenitapi.Services.UserService;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -19,17 +24,47 @@ public class Base64machine {
             return bis;
     }
 
+    private static InputStream getImgfromInternet(String url){
+        try {
+            URLConnection openConnection = new URL(url).openConnection();
+            openConnection.addRequestProperty("User-Agent",
+                    "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
+
+            return openConnection.getInputStream();
+        }catch(Exception e){
+            System.out.println("Algo fue mal obteniendo la img como stream de internet " + e);
+            return InputStream.nullInputStream();}
+    }
+
     public static InputStream getImgFromPost(int postid){
-        String base64 = PostService.getPostById(postid).orElse(null).getImage();
-        return decodeBase64AsStream(base64);
+        Post u = PostService.getPostById(postid).orElse(null);
+        String base64 = u.getImage();
+        String base642 = u.getImagefield();
+        if(Objects.equals(base64, "") || base64 == null){return getImgfromInternet("https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png");}
+        if(base64.contains("http://") || base64.contains("https://")){
+            if(!base64.contains(config.getSrvIp()))
+                return getImgfromInternet(base64);}
+        return decodeBase64AsStream(base642);
     }
     public static InputStream getImgFromStep(int stepid){
-        String base64 = StepService.getStepById(stepid).orElse(null).getImage();
-        return decodeBase64AsStream(base64);
+        Step u = StepService.getStepById(stepid).orElse(null);
+        String base64 = u.getImage();
+        String base642 = u.getImagefield();
+        if(Objects.equals(base64, "") || base64 == null){return getImgfromInternet("https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png");}
+        if(base64.contains("http://") || base64.contains("https://")){
+            if(!base64.contains(config.getSrvIp()))
+                return getImgfromInternet(base64);}
+        return decodeBase64AsStream(base642);
     }
     public static InputStream getImgFromProfile(String username){
-        String base64 = UserService.getUserByName(username).orElse(null).getImage();
-        return decodeBase64AsStream(base64);
+        User u = UserService.getUserByName(username).orElse(null);
+        String base64 = u.getImage();
+        String base642 = u.getImagefield();
+        if(Objects.equals(base64, "") || base64 == null){return getImgfromInternet("https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png");}
+        if(base64.contains("http://") || base64.contains("https://")){
+            if(!base64.contains(config.getSrvIp()))
+                return getImgfromInternet(base64);}
+        return decodeBase64AsStream(base642);
     }
 
     public static String isBase64(String imgbase64, int postid, int stepid, String username){

@@ -2,6 +2,7 @@ package com.greenit.greenitapi.Services;
 
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;
+import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,8 @@ public class StepService {
                         int id = resultSet.getInt("id");
                         int prevStepID = resultSet.getInt("previousStep");
                         String image = resultSet.getString("image");
-                        if (prevStepID == 0) step = new Step(desc, id, image); else
-                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null) , image);
+                        if (prevStepID == 0) step = new Step(desc, id, Base64machine.isBase64(image, 0, id, ""), image); else
+                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null) , Base64machine.isBase64(image, 0, id, ""), image);
                         sol.add(step);
                     } while (resultSet.next());
                     connection.close();
@@ -63,8 +64,8 @@ public class StepService {
                         int id = resultSet.getInt("id");
                         int prevStepID = resultSet.getInt("previousStep");
                         String image = resultSet.getString("image");
-                        if (prevStepID == 0) step = new Step(desc, id, image); else
-                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), image);
+                        if (prevStepID == 0) step = new Step(desc, id, Base64machine.isBase64(image, 0, id, ""), image); else
+                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), Base64machine.isBase64(image, 0, id, ""), image);
                         sol.add(step);
                     } while (resultSet.next());
                     connection.close();
@@ -98,8 +99,8 @@ public class StepService {
                     int id = resultSet.getInt("id");
                     int prevStepID = resultSet.getInt("previousStep");
                     String image = resultSet.getString("image");
-                    if (prevStepID == 0) step = new Step(desc, id, image); else
-                        step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), image);
+                    if (prevStepID == 0) step = new Step(desc, id, Base64machine.isBase64(image, 0, id, ""), image); else
+                        step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), Base64machine.isBase64(image, 0, id, ""), image);
                 } while (resultSet.next());
                 connection.close();
             }

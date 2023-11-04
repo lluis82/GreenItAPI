@@ -1,6 +1,7 @@
 package com.greenit.greenitapi.Services;
 
 import com.greenit.greenitapi.Entities.User;
+import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class UserService {
                     String password = resultSet.getString("password");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    user = new User(name, email, password, config.getSrvName(), image, description);
+                    user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
                 connection.close();
             }
@@ -67,7 +68,7 @@ public class UserService {
                     String password = resultSet.getString("password");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    user = new User(name, email, password, config.getSrvName(), image, description);
+                    user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
                 connection.close();
             }
@@ -99,7 +100,7 @@ public class UserService {
                     String password = resultSet.getString("password");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    user = new User(name, email, password, config.getSrvName(), image, description);
+                    user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
                 connection.close();
             }

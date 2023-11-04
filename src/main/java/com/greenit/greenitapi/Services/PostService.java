@@ -3,6 +3,7 @@ package com.greenit.greenitapi.Services;
 import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;
+import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, image, description);
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
                     sol.add(post);
                 } while (resultSet.next());
                 connection.close();
@@ -84,7 +85,7 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, image, description);
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
                 } while (resultSet.next());
                 connection.close();
             }
@@ -141,7 +142,7 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, image, description);
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
                     sol.add(post);
                 } while (resultSet.next());
                 connection.close();

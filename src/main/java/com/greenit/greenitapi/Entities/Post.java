@@ -7,14 +7,16 @@ public class Post {
     private String serverName;
     private String image;
     private String description;
+    private String imagefield;
 
-    public Post(User creator, Step firstStep, int id, String serverName, String image, String description){
+    public Post(User creator, Step firstStep, int id, String serverName, String image, String description, String image64){
         this.creator = creator;
         this.id = id;
         this.firstStep = firstStep;
         this.serverName = serverName;
         this.image = image;
         this.description = description;
+        this.imagefield = image64;
     }
 
     public Step getFirstStep() {
@@ -46,5 +48,8 @@ public class Post {
     }
     public int getId() {
         return id;
+    }
+    public String getImagefield() {
+        return imagefield;
     }
 }

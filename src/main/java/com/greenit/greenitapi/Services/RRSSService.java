@@ -7,6 +7,7 @@ import com.greenit.greenitapi.Util.Config;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -67,7 +68,10 @@ public class RRSSService {
         if(inline.trim().contains("STEP_CONTAINER")){
             try {
                 sol = "";
-                List<Step> a = StepService.getStepByPrevId(stepid).orElse(null);
+                List<Step> a;
+                try{
+                 a = StepService.getStepByPrevId(stepid).orElse(null);}catch (Exception e)
+                {a = new ArrayList<>();}
                 while(a.size()>0){
                     Step b = a.remove(0);
                     sol += "        <div class=\"container\">\n" +
@@ -90,7 +94,10 @@ public class RRSSService {
         if(inline.trim().contains("PROFILE_NAME"))
             sol = inline.replaceAll("<h1>PROFILE_NAME</h1>", "<h1>" + UserService.getUserByName(username).orElse(null).getDisplayName() + "'s profile</h1>");
         if(inline.trim().contains("PROFILE_CONTAINER")){
-            List<Post> a = PostService.getPostByUser(username).orElse(null);
+            List<Post> a;
+            try{
+                a = PostService.getPostByUser(username).orElse(null);}catch (Exception e)
+            {a = new ArrayList<>();}
             sol = "";
             while(a.size()>0){
                 Post b = a.remove(0);
