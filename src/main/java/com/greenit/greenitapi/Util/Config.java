@@ -119,7 +119,6 @@ public class Config {
         properties.load(fi);
         fi.close();
     }
-    //HAY QUE TOCAR ESTO PARA QUE EN LINUX SEA DIFERENTE PERO NO LO VOY A HACER AHORA
     public static Boolean inDebug(){
         if(Objects.equals(System.getProperty("os.name"), "Linux")){return false;} else return true;
     }
