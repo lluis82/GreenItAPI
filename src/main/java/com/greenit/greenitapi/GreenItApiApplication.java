@@ -12,7 +12,8 @@ public class GreenItApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(GreenItApiApplication.class, args);
         System.out.println("GreenIt API Server " + config.getSrvName());
-
+        if(config.inDebug()){System.out.println("=-= RUNNING IN DEBUG MODE =-=");}
+        System.out.println("path to resources: " + Config.getResourcesLocation());
 
         //ASCII Art
         Scanner input;
@@ -22,7 +23,7 @@ public class GreenItApiApplication {
                 System.out.println(input.nextLine());
             }
         } catch (Exception e) {
-            System.out.println("No se pudo encontrar el ASCII art para el nombre del server");
+            System.out.println("No se pudo encontrar el ASCII art para el nombre del server " + e);
         }
         System.out.println("Corriendo sobre: " + System.getProperty("os.name"));
     }

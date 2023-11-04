@@ -12,7 +12,7 @@ public class mariadbConnect {
                     config.getMdbURL(), config.getMdbUser(), config.getMdbPass()
             );
         } catch (Exception e) {
-            System.out.println("Error al conectar con la BD de mariaDB");
+            System.out.println("Error al conectar con la BD de mariaDB " + e);
         }
         return connection;
     }
