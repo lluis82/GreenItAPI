@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register(@RequestParam String email,@RequestParam String password,@RequestParam String username) {
-        String sol = userService.register(email, password, username);
+    public String register(@RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String image, @RequestParam String description) {
+        String sol = userService.register(email, password, username, image, description);
         return sol;
     }
 

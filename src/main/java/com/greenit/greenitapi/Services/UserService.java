@@ -111,15 +111,17 @@ public class UserService {
     }
 
 
-    public static String register(String emailIn, String password, String username) {
+    public static String register(String emailIn, String password, String username, String image, String description) {
         connection = mariadbConnect.mdbconn();
         if(getUserByName(username) != null){return config.getSrvName() + " FAIL, ya existe un usuario con ese nombre";}
         try (PreparedStatement statement = connection.prepareStatement("""
-                    INSERT INTO users (email, userName, password) VALUES (?, ?, ?)
+                    INSERT INTO users (email, userName, password, image, description) VALUES (?, ?, ?, ?, ?)
                 """)) {
             statement.setString(1,emailIn);
             statement.setString(2,username);
             statement.setString(3,password);
+            statement.setString(4,image);
+            statement.setString(5,description);
             statement.executeQuery();
             connection.close();
         } catch (Exception e) {
