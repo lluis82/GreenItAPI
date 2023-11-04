@@ -21,11 +21,8 @@ public class Config {
             "#MDBPASS -> La contraseña para mariaDB\n\n\n";
     public Config(){
         try {
-            if(System.getProperty("os.name").equals("Mac OS X")   ||
-               System.getProperty("os.name").equals("Windows 10") ||
-               System.getProperty("os.name").equals("Windows 11"))
-                {file = new File("src/main/resources/server.properties");}
-            else{file = new File("/home/ubuntu/app/server.properties");}
+            file = new File(getResourcesLocation() + "server.properties");
+            System.out.println("SERVER.PROPERTIES EN: " + file.getAbsolutePath());
             loadProperties();
         } catch (IOException e) {
             throw new RuntimeException(e);

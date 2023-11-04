@@ -12,7 +12,7 @@ public class GreenItApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(GreenItApiApplication.class, args);
         System.out.println("GreenIt API Server " + config.getSrvName());
-        if(config.inDebug()){System.out.println("=-= RUNNING IN DEBUG MODE =-=");}
+        if(config.inDebug()){System.out.println("=-= RUNNING IN DEBUG MODE =-=");}else{System.out.println("-=- RUNNING IN AWS MODE -=-");}
         System.out.println("path to resources: " + Config.getResourcesLocation());
 
         //ASCII Art
