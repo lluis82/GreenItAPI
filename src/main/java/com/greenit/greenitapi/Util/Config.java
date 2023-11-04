@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 public class Config {
     //Sí, he copiado esta clase entera del proyecto de PSW y no tengo ninguna clase de remordimiento
@@ -123,7 +124,7 @@ public class Config {
     }
     //HAY QUE TOCAR ESTO PARA QUE EN LINUX SEA DIFERENTE PERO NO LO VOY A HACER AHORA
     public static Boolean inDebug(){
-        if(System.getProperty("os.name") == "Linux"){return false;} else return true;
+        if(Objects.equals(System.getProperty("os.name"), "Linux")){return false;} else return true;
     }
     public static String getHTMLLocation(){if(inDebug()){return "src/main/resources/html/";}else return "/home/ubuntu/app/html/";}
     public static String getResourcesLocation(){if(inDebug()){return "src/main/resources/";}else return "/home/ubuntu/app/";}
