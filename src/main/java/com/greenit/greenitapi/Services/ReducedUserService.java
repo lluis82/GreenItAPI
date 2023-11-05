@@ -6,6 +6,7 @@ import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ReducedUserService {
 
     private static Connection connection;
@@ -53,7 +55,7 @@ public class ReducedUserService {
     }
 
     // id -> List<ReducedUser> lista de pibes que followea a id
-    public static Optional<List<ReducedUser>> getUserFollowes(int userId) {
+    public static Optional<List<ReducedUser>> getUserFollowers(int userId) {
         Optional<List<ReducedUser>> optional;
         List<ReducedUser> sol = new ArrayList<>();
         connection = mariadbConnect.mdbconn();
