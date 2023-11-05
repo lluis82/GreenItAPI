@@ -108,7 +108,7 @@ public class ReducedUserService {
     public String deleteFollower(int userId, int unfollowedUserId) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""
-                    DELETE * FROM Follows WHERE User = ? AND Follows = ?
+                    DELETE FROM Follows WHERE User = ? AND Follows = ?
                 """)) {
             statement.setInt(1, userId);
             statement.setInt(2, unfollowedUserId);
