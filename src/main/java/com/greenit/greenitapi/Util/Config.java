@@ -18,6 +18,7 @@ public class Config {
             "#PUBLICIP -> La IP pública del servidor\n" +
             "#MARIADB -> La URL del servidor de MariaDB\n" +
             "#MDBUSER -> El usuario para mariaDB\n" +
+            "#BufferIncomingConnections -> Si el servidor debe retrasar las conexiones entrantes si hay muchas\n" +
             "#MDBPASS -> La contraseña para mariaDB\n\n\n";
     public Config(){
         try {
@@ -34,6 +35,7 @@ public class Config {
         if(getMdbPass() == null ){setMdbPass("adre1234");}
         if(getMdbUser() == null ){setMdbUser("root");}
         if(getSrvIp() == null ){setSrvIp("127.0.0.1");}
+        if(bufferIncomingConnections() == null ){setBufferIncomingConnections("false");}
         if(getMdbURL() == null ){setMdbURL("jdbc:mariadb://localhost:3306/merequetengue");}
         //endregion
     }
@@ -122,6 +124,8 @@ public class Config {
     public static Boolean inDebug(){
         if(Objects.equals(System.getProperty("os.name"), "Linux")){return false;} else return true;
     }
+    public Boolean bufferIncomingConnections(){return Boolean.parseBoolean((String)properties.get("BufferIncomingConnections"));}
+    public void setBufferIncomingConnections(String value){properties.setProperty("BufferIncomingConnections", "" + value);try{saveProperties();}catch(IOException e){}}
     public static String getHTMLLocation(){if(inDebug()){return "src/main/resources/html/";}else return "/home/ubuntu/app/html/";}
     public static String getResourcesLocation(){if(inDebug()){return "src/main/resources/";}else return "/home/ubuntu/app/";}
 

@@ -35,4 +35,63 @@ class GreenItApiApplicationTests {
 
     }
 
+    @Test
+    private void testconnectiondb(){
+        try {
+            mockMvc.perform(get("http://localhost:8080/servers"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$").isArray())
+                    .andExpect(jsonPath("$[0].name").value("Touka"));
+        } catch (Exception e){}
+    }
+    @Test
+    public void testDBConnectionBuffer(){
+        Thread t1 = new Thread(() -> {testconnectiondb();});
+        Thread t2 = new Thread(() -> {testconnectiondb();});
+        Thread t3 = new Thread(() -> {testconnectiondb();});
+        Thread t4 = new Thread(() -> {testconnectiondb();});
+        Thread t5 = new Thread(() -> {testconnectiondb();});
+        Thread t6 = new Thread(() -> {testconnectiondb();});
+        Thread t7 = new Thread(() -> {testconnectiondb();});
+        Thread t8 = new Thread(() -> {testconnectiondb();});
+        Thread t9 = new Thread(() -> {testconnectiondb();});
+        Thread t10 = new Thread(() -> {testconnectiondb();});
+        Thread t11 = new Thread(() -> {testconnectiondb();});
+        Thread t12 = new Thread(() -> {testconnectiondb();});
+        Thread t13 = new Thread(() -> {testconnectiondb();});
+        Thread t14 = new Thread(() -> {testconnectiondb();});
+        Thread t15 = new Thread(() -> {testconnectiondb();});
+        Thread t16 = new Thread(() -> {testconnectiondb();});
+        Thread t17 = new Thread(() -> {testconnectiondb();});
+        Thread t18 = new Thread(() -> {testconnectiondb();});
+        Thread t19 = new Thread(() -> {testconnectiondb();});
+        Thread t20 = new Thread(() -> {testconnectiondb();});
+
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
+        t6.start();
+        t7.start();
+        t8.start();
+        t9.start();
+        t10.start();
+        t11.start();
+        t12.start();
+        t13.start();
+        t14.start();
+        t15.start();
+        t16.start();
+        t17.start();
+        t18.start();
+        t19.start();
+        t20.start();
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
