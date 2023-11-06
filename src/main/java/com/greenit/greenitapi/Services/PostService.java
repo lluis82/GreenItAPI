@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,13 +51,16 @@ public class PostService {
                     post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
                     sol.add(post);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(sol);
-
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
     }
 
@@ -87,12 +91,16 @@ public class PostService {
                     String description = resultSet.getString("description");
                     post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(post);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
     }
 
@@ -106,10 +114,19 @@ public class PostService {
             statement.setString(3,description);
             statement.setString(4,image);
             statement.executeQuery();
-            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return config.getSrvName() + " OK";
     }
@@ -145,12 +162,16 @@ public class PostService {
                     post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
                     sol.add(post);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(sol);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
     }
 }

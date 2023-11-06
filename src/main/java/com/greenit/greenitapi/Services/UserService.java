@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
@@ -38,12 +39,16 @@ public class UserService {
                     String description = resultSet.getString("description");
                     user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(user);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
     }
 
@@ -70,12 +75,16 @@ public class UserService {
                     String description = resultSet.getString("description");
                     user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(user);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
     }
 
@@ -102,12 +111,16 @@ public class UserService {
                     String description = resultSet.getString("description");
                     user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(user);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
     }
 
@@ -124,10 +137,19 @@ public class UserService {
             statement.setString(4,image);
             statement.setString(5,description);
             statement.executeQuery();
-            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return config.getSrvName() + " OK";
     }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,12 +36,16 @@ public class ServerService {
                 Boolean isSeed = resultSet.getBoolean("isSeed");
                 server = new Server(name, ip, isSeed);
                 sol.add(server);
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(sol);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
 
     }
@@ -65,12 +70,16 @@ public class ServerService {
                     Boolean isSeed = resultSet.getBoolean("isSeed");
                     server = new Server(name, ip, isSeed);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(server);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
 
     }
@@ -86,10 +95,19 @@ public class ServerService {
                 statement.setInt(3,1);
             statement.setInt(3,0);
             ResultSet resultSet = statement.executeQuery();
-            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return config.getSrvName() + " OK";
     }

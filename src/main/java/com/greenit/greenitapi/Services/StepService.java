@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,13 @@ public class StepService {
                 """)) {
                 ResultSet resultSet = statement.executeQuery();
 
-                if(resultSet.next()== false){return null;} else {
+                if(resultSet.next()== false){
+                    try {
+                        connection.close();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    return null;} else {
                     do {
                         String desc = resultSet.getString("description");
                         int id = resultSet.getInt("id");
@@ -43,7 +50,6 @@ public class StepService {
                             step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null) , Base64machine.isBase64(image, 0, id, ""), image);
                         sol.add(step);
                     } while (resultSet.next());
-                    connection.close();
                 }
             } catch (Exception e) {
                 System.out.println("Error al recuperar info de la BD");
@@ -58,7 +64,13 @@ public class StepService {
                 statement.setInt(1, stepId);
                 ResultSet resultSet = statement.executeQuery();
 
-                if(resultSet.next()== false){return null;} else {
+                if(resultSet.next()== false){
+                    try {
+                        connection.close();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    return null;} else {
                     do {
                         String desc = resultSet.getString("description");
                         int id = resultSet.getInt("id");
@@ -68,12 +80,16 @@ public class StepService {
                             step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), Base64machine.isBase64(image, 0, id, ""), image);
                         sol.add(step);
                     } while (resultSet.next());
-                    connection.close();
                 }
             } catch (Exception e) {
                 System.out.println("Error al recuperar info de la BD");
             }
             optional = Optional.of(sol);
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return optional;
     }
@@ -93,7 +109,13 @@ public class StepService {
 
             ResultSet resultSet = statement.executeQuery();
 
-            if(resultSet.next()== false){return null;} else {
+            if(resultSet.next()== false){
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                return null;} else {
                 do {
                     String desc = resultSet.getString("description");
                     int id = resultSet.getInt("id");
@@ -102,12 +124,16 @@ public class StepService {
                     if (prevStepID == 0) step = new Step(desc, id, Base64machine.isBase64(image, 0, id, ""), image); else
                         step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), Base64machine.isBase64(image, 0, id, ""), image);
                 } while (resultSet.next());
-                connection.close();
             }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
         }
         optional = Optional.of(step);
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
         return optional;
     }
 
@@ -131,6 +157,11 @@ public class StepService {
                     statement2.executeQuery();
                 } catch (Exception e) {
                     System.out.println("Error al recuperar info de la BD");
+                    try {
+                        connection.close();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
                 }
             }else{
@@ -142,13 +173,27 @@ public class StepService {
                     statement2.executeQuery();
                 } catch (Exception e) {
                     System.out.println("Error al recuperar info de la BD");
+                    try {
+                        connection.close();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
                 }
             }
-            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return config.getSrvName() + " OK";
     }

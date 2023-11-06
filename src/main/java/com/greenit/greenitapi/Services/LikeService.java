@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,10 +28,19 @@ public class LikeService {
             statement.setInt(2,postid);
             statement.setString(1,username);
             statement.executeQuery();
-            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return config.getSrvName() + " OK";
     }
@@ -43,10 +53,19 @@ public class LikeService {
             statement.setInt(2,postid);
             statement.setString(1,username);
             statement.executeQuery();
-            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return config.getSrvName() + " OK";
     }
@@ -63,9 +82,13 @@ public class LikeService {
                 do {
                     sol = resultSet.getInt("CUANTOS");
                 } while (resultSet.next());}
-            connection.close();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD " + e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return sol;
     }
