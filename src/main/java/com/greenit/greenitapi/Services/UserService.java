@@ -32,12 +32,13 @@ public class UserService {
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()== false){return null;} else {
                 do {
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
+                    user = new User(id, name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
             }
         } catch (Exception e) {
@@ -73,7 +74,7 @@ public class UserService {
                     String password = resultSet.getString("password");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
+                    user = new User(id, name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
             }
         } catch (Exception e) {
@@ -104,12 +105,13 @@ public class UserService {
 
             if(resultSet.next()== false){return null;} else {
                 do {
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    user = new User(name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
+                    user = new User(id, name, email, password, config.getSrvName(), Base64machine.isBase64(image, 0, 0, name), description, image);
                 } while (resultSet.next());
             }
         } catch (Exception e) {

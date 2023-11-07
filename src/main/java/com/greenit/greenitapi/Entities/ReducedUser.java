@@ -2,11 +2,13 @@ package com.greenit.greenitapi.Entities;
 
 public class ReducedUser {
 
+    private int id;
     private String displayName;
     private String image;
     private String imagefield;
 
-    public ReducedUser(String displayName, String image, String imagefield) {
+    public ReducedUser(int id, String displayName, String image, String imagefield) {
+        this.id = id;
         this.displayName = displayName;
         this.image = image;
         this.imagefield = imagefield;
@@ -34,5 +36,13 @@ public class ReducedUser {
 
     public void setImagefield(String imagefield) {
         this.imagefield = imagefield;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
