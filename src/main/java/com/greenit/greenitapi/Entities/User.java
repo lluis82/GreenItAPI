@@ -1,6 +1,7 @@
 package com.greenit.greenitapi.Entities;
 
 public class User {
+    private int id;
     private String displayName;
     private String email;
     private String password;
@@ -9,7 +10,8 @@ public class User {
     private String image;
     private String imagefield;
 
-    public User(String displayName, String email, String password, String serverName, String image, String description, String image64){
+    public User(int id, String displayName, String email, String password, String serverName, String image, String description, String image64){
+        this.id =id;
         this.displayName=displayName;
         this.email=email;
         this.password=password;
@@ -51,5 +53,13 @@ public class User {
     public String getDescription(){return description;}
     public void setServerName(String serverName) {
         this.serverName = serverName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

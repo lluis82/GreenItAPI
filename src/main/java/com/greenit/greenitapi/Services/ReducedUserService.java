@@ -43,7 +43,7 @@ public class ReducedUserService {
                 do {
                     int follows = resultSet.getInt("Follows");
                     User u = UserService.getUserById(follows).orElse(null);
-                    ReducedUser ru = new ReducedUser(u.getDisplayName(), u.getImage(), u.getImagefield());
+                    ReducedUser ru = new ReducedUser(follows, u.getDisplayName(), u.getImage(), u.getImagefield());
                     sol.add(ru);
                 } while (resultSet.next());
             }
@@ -79,7 +79,7 @@ public class ReducedUserService {
                 do {
                     int user = resultSet.getInt("User");
                     User u = UserService.getUserById(user).orElse(null);
-                    ReducedUser ru = new ReducedUser(u.getDisplayName(), u.getImage(), u.getImagefield());
+                    ReducedUser ru = new ReducedUser(user, u.getDisplayName(), u.getImage(), u.getImagefield());
                     sol.add(ru);
                 } while (resultSet.next());
             }
