@@ -45,6 +45,32 @@ public class LikeService {
         return config.getSrvName() + " OK";
     }
 
+    public static String isalreadyliked(String username, int postid) {
+        connection = mariadbConnect.mdbconn();
+        int sol = 0;
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    SELECT COUNT(*) AS 'CUANTOS', post FROM likes WHERE post = ? AND user = ?
+                """)) {
+            statement.setInt(1,postid);
+            statement.setInt(2,UserService.getUserByName(username).orElse(null).getId());
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()== false){return "false";} else {
+                do {
+                    sol = resultSet.getInt("CUANTOS");
+                    System.out.println(sol);
+                } while (resultSet.next());}
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD " + e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        if(sol!= 0){return "true";}else return "false";
+    }
+
+
     public static String unlike(String username, int postid) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""

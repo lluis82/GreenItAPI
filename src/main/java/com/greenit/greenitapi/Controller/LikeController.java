@@ -33,4 +33,10 @@ public class LikeController {
         int sol = likeService.howmanylikes(postid);
         return sol;
     }
+
+    @GetMapping("/ispostalreadyliked")
+    public String checklike(@RequestParam int postid, @RequestParam String username) {
+        String sol = likeService.isalreadyliked(username, postid);
+        return sol;
+    }
 }
