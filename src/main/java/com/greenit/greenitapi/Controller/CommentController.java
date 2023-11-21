@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,20 +28,20 @@ public class CommentController {
     public List<Comment> getCommentsfromPost(@RequestParam int postid) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getComments", postid)));
         if(cached != null) return (List<Comment>) cached.getBody();
-        Optional<List<Comment>> step = CommentService.getCommentByPostID(postid);
-        Cache.addToCache(new Request().setBody(List.of("/comments", postid)), new Response().setBody(step.orElse(null)));
-        if(step == null) return null;
-        return (List<Comment>) step.orElse(null);
+        List<Comment> step = CommentService.getCommentByPostID(postid).orElse(null);
+        Cache.addToCache(new Request().setBody(List.of("/comments", postid)), new Response().setBody(step));
+        if(step == null) return new ArrayList<>();
+        return step;
     }
 
     @GetMapping("/getReplies")
     public List<Comment> getRepliesFromCommentID(@RequestParam int previd) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getReplies", previd)));
         if(cached != null) return (List<Comment>) cached.getBody();
-        Optional<List<Comment>> step = CommentService.getRepliesToComment(previd);
-        Cache.addToCache(new Request().setBody(List.of("/getReplies", previd)), new Response().setBody(step.orElse(null)));
-        if(step == null) return null;
-        return (List<Comment>) step.orElse(null);
+        List<Comment> step = CommentService.getRepliesToComment(previd).orElse(null);
+        Cache.addToCache(new Request().setBody(List.of("/getReplies", previd)), new Response().setBody(step));
+        if(step == null) return new ArrayList<>();
+        return step;
     }
 
     @GetMapping("/comment")

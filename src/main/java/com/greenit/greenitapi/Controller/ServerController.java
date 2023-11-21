@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,10 +29,10 @@ public class ServerController {
     public List<Server> getServers() {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/servers")));
         if(cached != null) return (List<Server>) cached.getBody();
-        Optional<List<Server>> server = serverService.getServers();
-        Cache.addToCache(new Request().setBody(List.of("/servers")), new Response().setBody(server.orElse(null)));
-        if(server == null) return null;
-        return (List<Server>) server.orElse(null);
+        List<Server> server = serverService.getServers().orElse(null);
+        Cache.addToCache(new Request().setBody(List.of("/servers")), new Response().setBody(server));
+        if(server == null) return new ArrayList<>();
+        return server;
     }
 
     @GetMapping("/meet")
@@ -45,10 +46,10 @@ public class ServerController {
     public Server getServer() {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/server")));
         if(cached != null) return (Server) cached.getBody().get(0);
-        Optional<Server> server = serverService.getownServer();
-        Cache.addToCache(new Request().setBody(List.of("/server")), new Response().setBody(List.of(server.orElse(null))));
+        Server server = serverService.getownServer().orElse(null);
+        Cache.addToCache(new Request().setBody(List.of("/server")), new Response().setBody(List.of(server)));
         if(server == null) return null;
-        return (Server) server.orElse(null);
+        return server;
     }
 
     @GetMapping("/purgecache")

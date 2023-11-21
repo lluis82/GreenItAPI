@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,20 +28,20 @@ public class StepController {
     public Step getStepByid(@RequestParam int id) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/step", id)));
         if(cached != null) return (Step) cached.getBody().get(0);
-        Optional<Step> step = StepService.getStepById(id);
+        Step step = StepService.getStepById(id).orElse(null);
         Cache.addToCache(new Request().setBody(List.of("/step", id)), new Response().setBody(List.of(step)));
         if(step == null) return null;
-        return (Step) step.orElse(null);
+        return step;
     }
 
     @GetMapping("/prevstep")
     public List<Step> getStepByPrevId(@RequestParam int previd) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/prevstep", previd)));
         if(cached != null) return (List<Step>) cached.getBody();
-        Optional<List<Step>> step = StepService.getStepByPrevId(previd);
-        Cache.addToCache(new Request().setBody(List.of("/prevstep", previd)), new Response().setBody(step.orElse(null)));
-        if(step == null) return null;
-        return (List<Step>) step.orElse(null);
+        List<Step> step = StepService.getStepByPrevId(previd).orElse(null);
+        Cache.addToCache(new Request().setBody(List.of("/prevstep", previd)), new Response().setBody(step));
+        if(step == null) return new ArrayList<>();
+        return step;
     }
 
     @GetMapping("/commit")
