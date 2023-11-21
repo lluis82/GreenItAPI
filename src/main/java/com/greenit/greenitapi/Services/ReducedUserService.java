@@ -149,4 +149,15 @@ public class ReducedUserService {
 
     }
 
+    public int getFollowersCount(int userId){
+        Optional<List<ReducedUser>> optionalUsers = getUserFollowers(userId);
+        int size = optionalUsers.isPresent() ? optionalUsers.get().size() : 0;
+        return size;
+    }
+
+    public int getFollowedCount(int userId){
+        Optional<List<ReducedUser>> optionalUsers = getFollowedbyUser(userId);
+        int size = optionalUsers.isPresent() ? optionalUsers.get().size() : 0;
+        return size;
+    }
 }

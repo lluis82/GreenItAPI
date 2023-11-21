@@ -50,4 +50,9 @@ public class PostController {
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/post", username)));
         return sol;
     }
+
+    @GetMapping("/getCountOfUserPosts")
+    public int getCountOfUserPosts(@RequestParam String username){
+        return postService.getCountOfUserPosts(username);
+    }
 }

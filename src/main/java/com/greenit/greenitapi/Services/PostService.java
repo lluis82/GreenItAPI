@@ -174,4 +174,10 @@ public class PostService {
         }
         return optional;
     }
+
+    public static int getCountOfUserPosts(String displayName){
+        Optional<List<Post>> postsList = getPostByUser(displayName);
+        int size = postsList.isPresent() ? postsList.get().size() : 0;
+        return size;
+    }
 }

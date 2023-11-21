@@ -58,4 +58,14 @@ public class ReducedUserController {
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followedByUser", userId)));
         return sol;
     }
+
+    @GetMapping("/getFollowersCount")
+    public int getFollowersCount(@RequestParam int userId){
+        return reducedUserService.getFollowersCount(userId);
+    }
+
+    @GetMapping("/getFollowedCount")
+    public int getFollowedCount(@RequestParam int userId){
+        return reducedUserService.getFollowedCount(userId);
+    }
 }

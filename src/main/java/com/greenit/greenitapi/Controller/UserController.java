@@ -49,4 +49,9 @@ public class UserController {
         return sol;
     }
 
+    @GetMapping("/updateUser")
+    public String updateUser(@RequestParam int id, @RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String image, @RequestParam String description){
+        String sol = userService.updateUser(id, email, password, username, image, description);
+        return sol;
+    }
 }
