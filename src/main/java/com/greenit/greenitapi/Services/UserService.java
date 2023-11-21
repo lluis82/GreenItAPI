@@ -30,7 +30,9 @@ public class UserService {
 
             statement.setString(1, emailIn);
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()== false){return null;} else {
+            if (resultSet.next() == false) {
+                return null;
+            } else {
                 do {
                     int id = resultSet.getInt("id");
                     String name = resultSet.getString("userName");
@@ -67,7 +69,9 @@ public class UserService {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
-            if(resultSet.next()== false){return null;} else {
+            if (resultSet.next() == false) {
+                return null;
+            } else {
                 do {
                     String name = resultSet.getString("userName");
                     String email = resultSet.getString("email");
@@ -103,7 +107,9 @@ public class UserService {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
 
-            if(resultSet.next()== false){return null;} else {
+            if (resultSet.next() == false) {
+                return null;
+            } else {
                 do {
                     int id = resultSet.getInt("id");
                     String name = resultSet.getString("userName");
@@ -129,15 +135,17 @@ public class UserService {
 
     public static String register(String emailIn, String password, String username, String image, String description) {
         connection = mariadbConnect.mdbconn();
-        if(getUserByName(username) != null){return config.getSrvName() + " FAIL, ya existe un usuario con ese nombre";}
+        if (getUserByName(username) != null) {
+            return config.getSrvName() + " FAIL, ya existe un usuario con ese nombre";
+        }
         try (PreparedStatement statement = connection.prepareStatement("""
                     INSERT INTO users (email, userName, password, image, description) VALUES (?, ?, ?, ?, ?)
                 """)) {
-            statement.setString(1,emailIn);
-            statement.setString(2,username);
-            statement.setString(3,password);
-            statement.setString(4,image);
-            statement.setString(5,description);
+            statement.setString(1, emailIn);
+            statement.setString(2, username);
+            statement.setString(3, password);
+            statement.setString(4, image);
+            statement.setString(5, description);
             statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -153,6 +161,47 @@ public class UserService {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+        return config.getSrvName() + " OK";
+    }
+
+    public static String updateUser(int userId, String emailIn, String password, String username, String image, String description) {
+        try (Connection connection = mariadbConnect.mdbconn()) {
+            if (getUserById(userId) == null) {
+                return config.getSrvName() + " FAIL, no existe un usuario con ese id";
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement("""
+                    UPDATE users SET email = ?, userName = ?, password = ?, image = ?, description = ? WHERE id = ?
+                """)) {
+                statement.setString(1, emailIn);
+                statement.setString(2, username);
+                statement.setString(3, password);
+                statement.setString(4, image);
+                statement.setString(5, description);
+                statement.setInt(6, userId);
+
+                int rowsAffected = statement.executeUpdate();
+                if (rowsAffected > 0 && rowsAffected < 2) {
+                    System.out.println("User updated successfully.");
+                } else {
+                    System.out.println("User not found or no change made.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error al updatear info de la BD: " + e.getMessage());
+                e.printStackTrace();
+                return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al conectar con la BD: " + e.getMessage());
+            e.printStackTrace();
+            return config.getSrvName() + " FAIL, Excepción: " + e.getMessage();
+        }
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
         return config.getSrvName() + " OK";
     }
 
