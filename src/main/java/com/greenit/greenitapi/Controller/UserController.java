@@ -52,6 +52,8 @@ public class UserController {
     @GetMapping("/updateUser")
     public String updateUser(@RequestParam int id, @RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String image, @RequestParam String description){
         String sol = userService.updateUser(id, email, password, username, image, description);
+        if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getUserByName", username)));
+        if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/user", username)));
         return sol;
     }
 }
