@@ -1,9 +1,7 @@
 package com.greenit.greenitapi.Services;
 
 import com.greenit.greenitapi.Entities.ReducedUser;
-import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;
-import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import org.springframework.stereotype.Service;
@@ -147,17 +145,5 @@ public class ReducedUserService {
         }
         return config.getSrvName() + " OK";
 
-    }
-
-    public int getFollowersCount(int userId){
-        Optional<List<ReducedUser>> optionalUsers = getUserFollowers(userId);
-        int size = optionalUsers.isPresent() ? optionalUsers.get().size() : 0;
-        return size;
-    }
-
-    public int getFollowedCount(int userId){
-        Optional<List<ReducedUser>> optionalUsers = getFollowedbyUser(userId);
-        int size = optionalUsers.isPresent() ? optionalUsers.get().size() : 0;
-        return size;
     }
 }
