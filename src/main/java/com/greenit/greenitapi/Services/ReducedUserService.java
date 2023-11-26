@@ -160,4 +160,40 @@ public class ReducedUserService {
         int size = optionalUsers.isPresent() ? optionalUsers.get().size() : 0;
         return size;
     }
+
+    public static boolean checkFollows(int userId, int followsUserId) {
+        boolean follows = false;
+        connection = mariadbConnect.mdbconn();
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+                SELECT EXISTS (
+                                SELECT 1
+                                FROM Follows
+                                WHERE User = ? AND Follows = ?
+                            ) AS follows;
+            """)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, followsUserId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                if (resultSet.getInt(1) == 1) {
+                    follows = true;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error closing connection: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+        return follows;
+    }
 }

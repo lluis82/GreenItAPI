@@ -49,6 +49,7 @@ public class ReducedUserController {
         String sol = reducedUserService.newFollower(userId, followedUserId);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followersUser", followedUserId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followedByUser", userId)));
+        if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/checkFollows", userId, followedUserId)));
         return sol;
     }
 
@@ -59,6 +60,7 @@ public class ReducedUserController {
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followedByUser", userId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getFollowedCount", userId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getFollowersCount", unfollowedUserId)));
+        if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/checkFollows", userId, unfollowedUserId)));
         return sol;
     }
 
@@ -78,5 +80,14 @@ public class ReducedUserController {
         int sol = reducedUserService.getFollowedCount(userId);
         Cache.addToCache(new Request().setBody(List.of("/getFollowedCount", userId)), new Response().setBody(List.of(sol)));
         return sol;
+    }
+
+    @GetMapping("/checkFollows")
+    public boolean checkFollows(@RequestParam int userId, @RequestParam int followedId){
+        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/checkFollows", userId, followedId)));
+        if(cached != null) return (boolean) cached.getBody().get(0);
+        boolean follows = ReducedUserService.checkFollows(userId,followedId);
+        Cache.addToCache(new Request().setBody(List.of("/checkFollows", userId, followedId)), new Response().setBody(List.of(follows)));
+        return follows;
     }
 }
