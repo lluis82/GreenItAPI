@@ -141,9 +141,9 @@ public class PostService {
                     SELECT *
                     FROM posts p
                     ORDER BY p.id
-                    LIMIT ?,5
+                    LIMIT ?,2
                 """)) {
-            statement.setInt(1,(5*page)-5);
+            statement.setInt(1,(2*page)-2);
             ResultSet resultSet = statement.executeQuery();
 
             if(resultSet.next()== false){return null;} else {
