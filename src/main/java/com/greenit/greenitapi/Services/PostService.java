@@ -1,5 +1,6 @@
 package com.greenit.greenitapi.Services;
 
+import com.greenit.greenitapi.Controller.UserController;
 import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;
@@ -37,7 +38,8 @@ public class PostService {
 
             if(resultSet.next()== false){return null;} else {
                 do {
-                    User creator = UserService.getUserByName(username).orElse(null);
+                    //User creator = UserService.getUserByName(username).orElse(null);
+                    User creator = UserController.getUserByName(username);
                     Step firstStep = null;
                     int id = resultSet.getInt("id");
                     try {
@@ -80,7 +82,8 @@ public class PostService {
 
             if(resultSet.next()== false){return null;} else {
                 do {
-                    User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    //User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    User creator = UserController.getUserById(resultSet.getInt("creator"));
                     Step firstStep = null;
                     try {
                         int idstep = resultSet.getInt("firstStep");
@@ -148,7 +151,8 @@ public class PostService {
 
             if(resultSet.next()== false){return null;} else {
                 do {
-                    User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    //User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    User creator = UserController.getUserById(resultSet.getInt("creator"));
                     Step firstStep = null;
                     int id = resultSet.getInt("id");
                     try {
@@ -173,11 +177,5 @@ public class PostService {
             throw new RuntimeException(ex);
         }
         return optional;
-    }
-
-    public static int getCountOfUserPosts(String displayName){
-        Optional<List<Post>> postsList = getPostByUser(displayName);
-        int size = postsList.isPresent() ? postsList.get().size() : 0;
-        return size;
     }
 }

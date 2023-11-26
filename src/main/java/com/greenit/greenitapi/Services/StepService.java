@@ -1,7 +1,6 @@
 package com.greenit.greenitapi.Services;
 
 import com.greenit.greenitapi.Entities.Step;
-import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;

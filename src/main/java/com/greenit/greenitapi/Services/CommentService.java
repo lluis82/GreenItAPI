@@ -1,10 +1,8 @@
 package com.greenit.greenitapi.Services;
 
+import com.greenit.greenitapi.Controller.UserController;
 import com.greenit.greenitapi.Entities.Comment;
-import com.greenit.greenitapi.Entities.Server;
-import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;
-import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import org.springframework.stereotype.Service;
@@ -47,7 +45,8 @@ public class CommentService {
                 do {
                     String desc = resultSet.getString("text");
                     int prevStepID = resultSet.getInt("replyto");
-                    User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    //User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    User creator = UserController.getUserById(resultSet.getInt("creator"));
                     if (prevStepID != 0) comment = new Comment(creator,id,desc,getCommentByID(prevStepID).orElse(null)); else
                         comment = new Comment(creator,id,desc,null);
                 } while (resultSet.next());
@@ -91,7 +90,8 @@ public class CommentService {
                     String desc = resultSet.getString("text");
                     int id = resultSet.getInt("id");
                     int prevStepID = resultSet.getInt("replyto");
-                    User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    //User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    User creator = UserController.getUserById(resultSet.getInt("creator"));
                     if (prevStepID != 0) comment = new Comment(creator,id,desc,getCommentByID(prevStepID).orElse(null)); else
                         comment = new Comment(creator,id,desc,null);
                     sol.add(comment);
@@ -136,7 +136,8 @@ public class CommentService {
                     String desc = resultSet.getString("text");
                     int id = resultSet.getInt("id");
                     int prevStepID = resultSet.getInt("replyto");
-                    User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    //User creator = UserService.getUserById(resultSet.getInt("creator")).orElse(null);
+                    User creator = UserController.getUserById(resultSet.getInt("creator"));
                     if (prevStepID != 0) comment = new Comment(creator,id,desc,getCommentByID(prevStepID).orElse(null)); else
                         comment = new Comment(creator,id,desc,null);
                     sol.add(comment);

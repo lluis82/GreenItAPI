@@ -1,5 +1,8 @@
 package com.greenit.greenitapi.Services;
 
+import com.greenit.greenitapi.Controller.PostController;
+import com.greenit.greenitapi.Controller.StepController;
+import com.greenit.greenitapi.Controller.UserController;
 import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Util.Base64machine;
@@ -41,15 +44,15 @@ public class RRSSService {
 
         //region POSTS
         if(inline.trim().contains("POST_TITLE"))
-            sol = inline.replaceAll("<h1>POST_TITLE</h1>", "<h1>" + PostService.getPostById(postid).orElse(null).getCreator().getDisplayName() + "'s post</h1>");
+            sol = inline.replaceAll("<h1>POST_TITLE</h1>", "<h1>" + PostController.getPostById(postid).getCreator().getDisplayName() + "'s post</h1>");
         if(inline.trim().contains("POST_DESCRIPTION"))
-            sol = inline.replaceAll("<p>POST_DESCRIPTION</p>", "<p>" + PostService.getPostById(postid).orElse(null).getDescription() + "</p>");
+            sol = inline.replaceAll("<p>POST_DESCRIPTION</p>", "<p>" + PostController.getPostById(postid).getDescription() + "</p>");
         if(inline.trim().contains("POST_IMAGE"))
             sol = inline.replaceAll("POST_IMAGE", "<img src=\"" + Base64machine.isBase64(PostService.getPostById(postid).orElse(null).getImage(), postid, 0, "") + "\" alt=\"Post Image\">");
         if(inline.trim().contains("POST_BUTTON")) {
             if(PostService.getPostById(postid).orElse(null).getFirstStep() != null)
             sol = inline.replaceAll("POST_BUTTON",
-                    "<button onclick=\"location.href='http://" + config.getSrvIp() + "/rrssstep?stepid=" + PostService.getPostById(postid).orElse(null).getFirstStep().getId() + "'\">Go to first step</button>");
+                    "<button onclick=\"location.href='http://" + config.getSrvIp() + "/rrssstep?stepid=" + PostController.getPostById(postid).getFirstStep().getId() + "'\">Go to first step</button>");
             else sol = "";// si no tiene first step borramos el indicador
         }
         //endregion
@@ -58,11 +61,11 @@ public class RRSSService {
         if(inline.trim().contains("STEP_IMAGE"))
             sol = inline.replaceAll("STEP_IMAGE", "<img src=\"" + Base64machine.isBase64(StepService.getStepById(stepid).orElse(null).getImage(), 0, stepid, "") + "\" alt=\"Step Image\">");
         if(inline.trim().contains("STEP_DESCRIPTION"))
-            sol = inline.replaceAll("<p>STEP_DESCRIPTION</p>", "<p>" + StepService.getStepById(stepid).orElse(null).getDescription() + "</p>");
+            sol = inline.replaceAll("<p>STEP_DESCRIPTION</p>", "<p>" + StepController.getStepByid(stepid).getDescription() + "</p>");
         if(inline.trim().contains("STEP_PREVIOUS")) {
             if(StepService.getStepById(stepid).orElse(null).getPreviousStep() != null)
                 sol = inline.replaceAll("STEP_PREVIOUS",
-                        "<button onclick=\"location.href='http://" + config.getSrvIp() + "/rrssstep?stepid=" + StepService.getStepById(stepid).orElse(null).getPreviousStep().getId() + "'\">Go to previous step</button>");
+                        "<button onclick=\"location.href='http://" + config.getSrvIp() + "/rrssstep?stepid=" + StepController.getStepByid(stepid).getPreviousStep().getId() + "'\">Go to previous step</button>");
             else sol = "";// si no tiene prev step borramos el indicador
         }
         if(inline.trim().contains("STEP_CONTAINER")){
@@ -70,7 +73,7 @@ public class RRSSService {
                 sol = "";
                 List<Step> a;
                 try{
-                 a = StepService.getStepByPrevId(stepid).orElse(null);}catch (Exception e)
+                 a = StepController.getStepByPrevId(stepid);}catch (Exception e)
                 {a = new ArrayList<>();}
                 while(a.size()>0){
                     Step b = a.remove(0);
@@ -88,15 +91,15 @@ public class RRSSService {
         if(inline.trim().contains("PROFILE_IMAGE"))
             sol = inline.replaceAll("PROFILE_IMAGE", "<img src=\"" + Base64machine.isBase64(UserService.getUserByName(username).orElse(null).getImage(), 0, 0, username) + "\" alt=\"Profile Image\">");
         if(inline.trim().contains("PROFILE_DESCRIPTION"))
-            sol = inline.replaceAll("<p>PROFILE_DESCRIPTION</p>", "<p>" + UserService.getUserByName(username).orElse(null).getDescription() + "</p>");
+            sol = inline.replaceAll("<p>PROFILE_DESCRIPTION</p>", "<p>" + UserController.getUserByName(username).getDescription() + "</p>");
         if(inline.trim().contains("PROFILE_USERNAME"))
-            sol = inline.replaceAll("<p>PROFILE_USERNAME</p>", "<p>" + UserService.getUserByName(username).orElse(null).getDisplayName() + "</p>");
+            sol = inline.replaceAll("<p>PROFILE_USERNAME</p>", "<p>" + UserController.getUserByName(username).getDisplayName() + "</p>");
         if(inline.trim().contains("PROFILE_NAME"))
-            sol = inline.replaceAll("<h1>PROFILE_NAME</h1>", "<h1>" + UserService.getUserByName(username).orElse(null).getDisplayName() + "'s profile</h1>");
+            sol = inline.replaceAll("<h1>PROFILE_NAME</h1>", "<h1>" + UserController.getUserByName(username).getDisplayName() + "'s profile</h1>");
         if(inline.trim().contains("PROFILE_CONTAINER")){
             List<Post> a;
             try{
-                a = PostService.getPostByUser(username).orElse(null);}catch (Exception e)
+                a = PostController.getPostByUser(username);}catch (Exception e)
             {a = new ArrayList<>();}
             sol = "";
             while(a.size()>0){

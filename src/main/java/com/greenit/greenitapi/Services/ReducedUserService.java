@@ -1,5 +1,6 @@
 package com.greenit.greenitapi.Services;
 
+import com.greenit.greenitapi.Controller.UserController;
 import com.greenit.greenitapi.Entities.ReducedUser;
 import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Util.Config;
@@ -40,7 +41,8 @@ public class ReducedUserService {
             } else {
                 do {
                     int follows = resultSet.getInt("Follows");
-                    User u = UserService.getUserById(follows).orElse(null);
+                    //User u = UserService.getUserById(follows).orElse(null);
+                    User u = UserController.getUserById(follows);
                     ReducedUser ru = new ReducedUser(follows, u.getDisplayName(), u.getImage(), u.getImagefield());
                     sol.add(ru);
                 } while (resultSet.next());
@@ -76,7 +78,8 @@ public class ReducedUserService {
             } else {
                 do {
                     int user = resultSet.getInt("User");
-                    User u = UserService.getUserById(user).orElse(null);
+                    //User u = UserService.getUserById(user).orElse(null);
+                    User u = UserController.getUserById(user);
                     ReducedUser ru = new ReducedUser(user, u.getDisplayName(), u.getImage(), u.getImagefield());
                     sol.add(ru);
                 } while (resultSet.next());
@@ -94,7 +97,7 @@ public class ReducedUserService {
     }
 
     // id -> empieza a followear a otra id
-    public String newFollower(int userId, int followedUserId) {
+    public static String newFollower(int userId, int followedUserId) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""
                     INSERT INTO Follows (User, Follows) VALUES (?, ?)
@@ -121,7 +124,7 @@ public class ReducedUserService {
     }
 
     //id -> deja de followear a otra id
-    public String deleteFollower(int userId, int unfollowedUserId) {
+    public static String deleteFollower(int userId, int unfollowedUserId) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""
                     DELETE FROM Follows WHERE User = ? AND Follows = ?
