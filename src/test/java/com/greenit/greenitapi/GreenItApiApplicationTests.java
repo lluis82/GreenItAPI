@@ -1,11 +1,22 @@
 package com.greenit.greenitapi;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+
+import java.time.Duration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -16,6 +27,7 @@ class GreenItApiApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
+    private static WebDriver webdriver;
 
     @Test
     public void testFollowedByUser() throws Exception {
@@ -94,4 +106,43 @@ class GreenItApiApplicationTests {
         }
     }
 
+
+
+//    @Test
+//    public void selenium1() throws InterruptedException {
+//        driver.get("https://www.google.com/");
+//        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+//        Thread.sleep(2000);
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//        js.executeScript("javascript:window.scrollBy(750,950)");
+//
+//        driver.quit();
+//    }
+
+
+    @BeforeAll
+    public static void beforeClass()
+    {
+        WebDriverManager.chromedriver().setup();
+        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.edgedriver().setup();
+    }
+    @BeforeEach
+    public void beforeMethod()
+    {
+        webdriver=new ChromeDriver();
+        webdriver.manage().window().maximize();
+    }
+    @AfterEach
+    public  void AfterMethod()
+    {
+        webdriver.close();
+    }
+    @Test
+    public  void test()
+    {
+        webdriver.get("http://www.google.com/");
+    }
+
 }
+
