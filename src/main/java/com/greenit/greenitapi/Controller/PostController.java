@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class PostController {
 
-    private final PostService postService;
+    private static PostService postService;
 
     @Autowired
     public PostController(PostService postService) {
@@ -25,28 +24,44 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public List<Post> getPostByUser(@RequestParam String username) {
+    public static List<Post> getPostByUser(@RequestParam String username) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/post", username)));
         if(cached != null) return (List<Post>) cached.getBody();
-        List<Post> post = postService.getPostByUser(username).orElse(null);
+        List<Post> post;
+        try{
+        post = PostService.getPostByUser(username).orElse(null);}catch(Exception e){return new ArrayList<>();}
         Cache.addToCache(new Request().setBody(List.of("/post", username)), new Response().setBody(post));
         if(post == null) return new ArrayList<>();
         return post;
     }
 
+    @GetMapping("/postById")
+    public static Post getPostById(@RequestParam int id) {
+        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/post", id)));
+        if(cached != null) return null;
+        Post post;
+        try{
+            post = PostService.getPostById(id).orElse(null);}catch(Exception e){return null;}
+        Cache.addToCache(new Request().setBody(List.of("/post", id)), new Response().setBody(List.of(post)));
+        if(post == null) return null;
+        return post;
+    }
+
     @GetMapping("/postsPaged")
-    public List<Post> getAllPosts(@RequestParam int page) {
+    public static List<Post> getAllPosts(@RequestParam int page) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/postsPaged", page)));
         if(cached != null) return (List<Post>) cached.getBody();
-        List<Post> post = postService.getAllPostsPaged(page).orElse(null);
+        List<Post> post;
+        try{
+        post = PostService.getAllPostsPaged(page).orElse(null);}catch(Exception e){return new ArrayList<>();}
         Cache.addToCache(new Request().setBody(List.of("/postsPaged", page)), new Response().setBody(post));
         if(post == null) return new ArrayList<>();
         return post;
     }
 
     @GetMapping("/publish")
-    public String publishPost(@RequestParam String username, @RequestParam String description, @RequestParam String image) {
-        String sol = postService.publishPost(username, description, image);
+    public static String publishPost(@RequestParam String username, @RequestParam String description, @RequestParam String image) {
+        String sol = PostService.publishPost(username, description, image);
         if(sol.contains("OK"))Cache.deleteIterableCustomFromCache(new Request().setBody(List.of("/postsPaged")));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/post", username)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getCountOfUserPosts", username)));
@@ -54,10 +69,10 @@ public class PostController {
     }
 
     @GetMapping("/getCountOfUserPosts")
-    public int getCountOfUserPosts(@RequestParam String username){
+    public static int getCountOfUserPosts(@RequestParam String username){
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getCountOfUserPosts", username)));
         if(cached != null) return (int) cached.getBody().get(0);
-        int sol = postService.getCountOfUserPosts(username);
+        int sol = getPostByUser(username).size();
         Cache.addToCache(new Request().setBody(List.of("/getCountOfUserPosts", username)), new Response().setBody(List.of(sol)));
         return sol;
     }

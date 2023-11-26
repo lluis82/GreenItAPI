@@ -18,7 +18,6 @@ public class Config {
             "#PUBLICIP -> La IP pública del servidor\n" +
             "#MARIADB -> La URL del servidor de MariaDB\n" +
             "#MDBUSER -> El usuario para mariaDB\n" +
-            "#BufferIncomingConnections -> Si el servidor debe retrasar las conexiones entrantes si hay muchas\n" +
             "#MDBPASS -> La contraseña para mariaDB\n\n\n";
     public Config(){
         try {

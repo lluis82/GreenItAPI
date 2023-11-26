@@ -25,28 +25,32 @@ public class StepController {
     }
 
     @GetMapping("/step")
-    public Step getStepByid(@RequestParam int id) {
+    public static Step getStepByid(@RequestParam int id) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/step", id)));
         if(cached != null) return (Step) cached.getBody().get(0);
-        Step step = StepService.getStepById(id).orElse(null);
+        Step step;
+        try{
+        step = StepService.getStepById(id).orElse(null);}catch(Exception e){return null;}
         Cache.addToCache(new Request().setBody(List.of("/step", id)), new Response().setBody(List.of(step)));
         if(step == null) return null;
         return step;
     }
 
     @GetMapping("/prevstep")
-    public List<Step> getStepByPrevId(@RequestParam int previd) {
+    public static List<Step> getStepByPrevId(@RequestParam int previd) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/prevstep", previd)));
         if(cached != null) return (List<Step>) cached.getBody();
-        List<Step> step = StepService.getStepByPrevId(previd).orElse(null);
+        List<Step> step;
+        try{
+        step = StepService.getStepByPrevId(previd).orElse(null);}catch(Exception e){return new ArrayList<>();}
         Cache.addToCache(new Request().setBody(List.of("/prevstep", previd)), new Response().setBody(step));
         if(step == null) return new ArrayList<>();
         return step;
     }
 
     @GetMapping("/commit")
-    public String publishPost(@RequestParam int prevStepId, @RequestParam Boolean isFirst, @RequestParam String description, @RequestParam int postid, @RequestParam String image) {
-        String sol = stepService.publishStep(prevStepId, isFirst, description, postid, image);
+    public static String publishPost(@RequestParam int prevStepId, @RequestParam Boolean isFirst, @RequestParam String description, @RequestParam int postid, @RequestParam String image) {
+        String sol = StepService.publishStep(prevStepId, isFirst, description, postid, image);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/prevstep", prevStepId)));
         return sol;
     }

@@ -25,12 +25,12 @@ public class ReducedUserController {
     }
 
     @GetMapping("/followedByUser")
-    public List<ReducedUser> getFollowedbyUser(@RequestParam int userId){
+    public static List<ReducedUser> getFollowedbyUser(@RequestParam int userId){
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/followedByUser", userId)));
         if(cached != null) return (List<ReducedUser>) cached.getBody();
         List<ReducedUser> followed;
         try{
-            followed = reducedUserService.getFollowedbyUser(userId).orElse(null);
+            followed = ReducedUserService.getFollowedbyUser(userId).orElse(null);
         }catch(Exception e){return new ArrayList<>();}
         Cache.addToCache(new Request().setBody(List.of("/followedByUser", userId)), new Response().setBody(followed));
         if(followed==null) return new ArrayList<>();
@@ -38,12 +38,12 @@ public class ReducedUserController {
     }
 
     @GetMapping("/followersUser")
-    public List<ReducedUser> getUserFollowers(@RequestParam int userId){
+    public static List<ReducedUser> getUserFollowers(@RequestParam int userId){
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/followersUser", userId)));
         if(cached != null) return (List<ReducedUser>) cached.getBody();
         List<ReducedUser> followers;
         try{
-            followers = reducedUserService.getUserFollowers(userId).orElse(null);
+            followers = ReducedUserService.getUserFollowers(userId).orElse(null);
         }catch(Exception e){return new ArrayList<>();}
         Cache.addToCache(new Request().setBody(List.of("/followersUser", userId)), new Response().setBody(followers));
         if(followers==null) return new ArrayList<>();
@@ -52,7 +52,7 @@ public class ReducedUserController {
 
     @GetMapping("/addNewFollower")
     public String newFollower(@RequestParam int userId, @RequestParam int followedUserId){
-        String sol = reducedUserService.newFollower(userId, followedUserId);
+        String sol = ReducedUserService.newFollower(userId, followedUserId);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followersUser", followedUserId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followedByUser", userId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getFollowedCount", userId)));
@@ -63,7 +63,7 @@ public class ReducedUserController {
 
     @GetMapping("/unfollow")
     public String deleteFollower(@RequestParam int userId, @RequestParam int unfollowedUserId){
-        String sol = reducedUserService.deleteFollower(userId, unfollowedUserId);
+        String sol = ReducedUserService.deleteFollower(userId, unfollowedUserId);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followersUser", unfollowedUserId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followedByUser", userId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getFollowedCount", userId)));
@@ -73,7 +73,7 @@ public class ReducedUserController {
     }
 
     @GetMapping("/getFollowersCount")
-    public int getFollowersCount(@RequestParam int userId){
+    public static int getFollowersCount(@RequestParam int userId){
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getFollowersCount", userId)));
         if(cached != null) return (int) cached.getBody().get(0);
         int sol = getUserFollowers(userId).size();
@@ -82,7 +82,7 @@ public class ReducedUserController {
     }
 
     @GetMapping("/getFollowedCount")
-    public int getFollowedCount(@RequestParam int userId){
+    public static int getFollowedCount(@RequestParam int userId){
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getFollowedCount", userId)));
         if(cached != null) return (int) cached.getBody().get(0);
         int sol = getFollowedbyUser(userId).size();
@@ -91,7 +91,7 @@ public class ReducedUserController {
     }
 
     @GetMapping("/checkFollows")
-    public boolean checkFollows(@RequestParam int userId, @RequestParam int followedId){
+    public static boolean checkFollows(@RequestParam int userId, @RequestParam int followedId){
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/checkFollows", userId, followedId)));
         if(cached != null) return (boolean) cached.getBody().get(0);
         boolean follows = ReducedUserService.checkFollows(userId,followedId);

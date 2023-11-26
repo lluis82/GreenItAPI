@@ -26,34 +26,38 @@ public class ServerController {
     }
 
     @GetMapping("/servers")
-    public List<Server> getServers() {
+    public static List<Server> getServers() {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/servers")));
         if(cached != null) return (List<Server>) cached.getBody();
-        List<Server> server = serverService.getServers().orElse(null);
+        List<Server> server;
+        try{
+        server = ServerService.getServers().orElse(null);}catch(Exception e){return new ArrayList<>();}
         Cache.addToCache(new Request().setBody(List.of("/servers")), new Response().setBody(server));
         if(server == null) return new ArrayList<>();
         return server;
     }
 
     @GetMapping("/meet")
-    public String meetServer(@RequestParam String serverip, @RequestParam String servername) {
-        String sol = serverService.srvRegister(serverip, servername);
+    public static String meetServer(@RequestParam String serverip, @RequestParam String servername) {
+        String sol = ServerService.srvRegister(serverip, servername);
         if(sol.contains("OK")) Cache.deleteFromCache(new Request().setBody(List.of("/servers")));
         return sol;
     }
 
     @GetMapping("/server")
-    public Server getServer() {
+    public static Server getServer() {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/server")));
         if(cached != null) return (Server) cached.getBody().get(0);
-        Server server = serverService.getownServer().orElse(null);
+        Server server;
+        try{
+        server = ServerService.getownServer().orElse(null);}catch(Exception e){return null;}
         Cache.addToCache(new Request().setBody(List.of("/server")), new Response().setBody(List.of(server)));
         if(server == null) return null;
         return server;
     }
 
     @GetMapping("/purgecache")
-    public String purge(){
+    public static String purge(){
         Cache.purge();
         Config c = new Config();
         return c.getSrvName() + " OK";

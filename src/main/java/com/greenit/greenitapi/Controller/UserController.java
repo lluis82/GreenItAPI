@@ -23,36 +23,53 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public User getUser(@RequestParam String email) {
+    public static User getUser(@RequestParam String email) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/user", email)));
         if(cached != null) return (User) cached.getBody().get(0);
-        User user = userService.getUser(email).orElse(null);
+        User user;
+        try{
+        user = UserService.getUser(email).orElse(null);}catch (Exception e){return null;}
         Cache.addToCache(new Request().setBody(List.of("/user", email)), new Response().setBody(List.of(user)));
         if(user == null) return null;
         return user;
     }
 
     @GetMapping("/getUserByName")
-    public User getUserbyName(@RequestParam String username) {
+    public static User getUserByName(@RequestParam String username) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getUserByName", username)));
         if(cached != null) return (User) cached.getBody().get(0);
-        User user = userService.getUserByName(username).orElse(null);
+        User user;
+        try{
+        user = UserService.getUserByName(username).orElse(null);}catch (Exception e){return null;}
         Cache.addToCache(new Request().setBody(List.of("/getUserByName", username)), new Response().setBody(List.of(user)));
         if(user == null) return null;
         return user;
     }
 
+    @GetMapping("/getUserById")
+    public static User getUserById(@RequestParam int id) {
+        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getUserById", id)));
+        if(cached != null) return (User) cached.getBody().get(0);
+        User user;
+        try{
+        user = UserService.getUserById(id).orElse(null);}catch (Exception e){return null;}
+        Cache.addToCache(new Request().setBody(List.of("/getUserById", id)), new Response().setBody(List.of(user)));
+        if(user == null) return null;
+        return user;
+    }
+
     @GetMapping("/register")
-    public String register(@RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String image, @RequestParam String description) {
-        String sol = userService.register(email, password, username, image, description);
+    public static String register(@RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String image, @RequestParam String description) {
+        String sol = UserService.register(email, password, username, image, description);
         return sol;
     }
 
     @GetMapping("/updateUser")
-    public String updateUser(@RequestParam int id, @RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String image, @RequestParam String description){
-        String sol = userService.updateUser(id, email, password, username, image, description);
+    public static String updateUser(@RequestParam int id, @RequestParam String email, @RequestParam String password, @RequestParam String username, @RequestParam String image, @RequestParam String description){
+        String sol = UserService.updateUser(id, email, password, username, image, description);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getUserByName", username)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/user", username)));
+        if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getUserById", id)));
         return sol;
     }
 }
