@@ -5,8 +5,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Duration;
 
+import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -130,6 +133,7 @@ class GreenItApiApplicationTests {
     {
         webdriver=new EdgeDriver();
         webdriver.manage().window().maximize();
+        webdriver.manage().timeouts().implicitlyWait(Duration.ofMillis(10000));
     }
     @AfterEach
     public void AfterMethod()
@@ -138,9 +142,17 @@ class GreenItApiApplicationTests {
     }
     @Test
     public void test() throws InterruptedException {
-        //webdriver.get("http://www.google.com/");
-        webdriver.get("http://16.170.159.93/rrsspost?postid=12");
+        webdriver.get("http://16.170.159.93/rrssprofile?username=jrber23");
+        //webdriver.get("http://16.170.159.93/rrsspost?postid=12");
+        WebElement w2 = webdriver.findElement(By.xpath("/html/body/main/div[2]/div[3]/button"));
+        w2.click();
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrsspost?postid=12", webdriver.getCurrentUrl());
         Thread.sleep(2000);
+        WebElement w = webdriver.findElement(By.xpath("/html/body/article/button"));
+        w.click();
+        Thread.sleep(2000);
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=15", webdriver.getCurrentUrl());
+
     }
 
 }
