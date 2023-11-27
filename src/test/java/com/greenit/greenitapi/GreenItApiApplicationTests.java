@@ -141,18 +141,41 @@ class GreenItApiApplicationTests {
         webdriver.close();
     }
     @Test
-    public void test() throws InterruptedException {
+    public void test() throws Exception {
+        webdriver.get("http://16.170.159.93/purgecache");
+        Thread.sleep(100);
+        JavascriptExecutor js = (JavascriptExecutor) webdriver;
+        WebElement w2;
         webdriver.get("http://16.170.159.93/rrssprofile?username=jrber23");
-        //webdriver.get("http://16.170.159.93/rrsspost?postid=12");
-        WebElement w2 = webdriver.findElement(By.xpath("/html/body/main/div[2]/div[3]/button"));
+
+        w2 = webdriver.findElement(By.xpath("/html/body/main/div[2]/div[3]/button"));
         w2.click();
         assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrsspost?postid=12", webdriver.getCurrentUrl());
         Thread.sleep(2000);
-        WebElement w = webdriver.findElement(By.xpath("/html/body/article/button"));
-        w.click();
-        Thread.sleep(2000);
-        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=15", webdriver.getCurrentUrl());
 
+        w2 = webdriver.findElement(By.xpath("/html/body/article/button"));
+        w2.click();
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=15", webdriver.getCurrentUrl());
+        Thread.sleep(2000);
+
+        js.executeScript("javascript:window.scrollBy(750,950)");
+
+        w2 = webdriver.findElement(By.xpath("/html/body/article/main/div/div/button"));
+        w2.click();
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=20", webdriver.getCurrentUrl());
+        Thread.sleep(2000);
+
+        js.executeScript("javascript:window.scrollBy(750,950)");
+
+        w2 = webdriver.findElement(By.xpath("/html/body/article/main/div/div/button"));
+        w2.click();
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=25", webdriver.getCurrentUrl());
+        Thread.sleep(2000);
+
+        w2 = webdriver.findElement(By.xpath("/html/body/article/button"));
+        w2.click();
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=20", webdriver.getCurrentUrl());
+        Thread.sleep(2000);
     }
 
 }
