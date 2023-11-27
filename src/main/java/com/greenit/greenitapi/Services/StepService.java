@@ -1,5 +1,6 @@
 package com.greenit.greenitapi.Services;
 
+import com.greenit.greenitapi.Controller.StepController;
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Util.Base64machine;
 import com.greenit.greenitapi.Util.Config;
@@ -46,7 +47,7 @@ public class StepService {
                         int prevStepID = resultSet.getInt("previousStep");
                         String image = resultSet.getString("image");
                         if (prevStepID == 0) step = new Step(desc, id, Base64machine.isBase64(image, 0, id, ""), image); else
-                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null) , Base64machine.isBase64(image, 0, id, ""), image);
+                            step = new Step(desc, id, StepController.getStepByid(resultSet.getInt("previousStep")) , Base64machine.isBase64(image, 0, id, ""), image);
                         sol.add(step);
                     } while (resultSet.next());
                 }
@@ -76,7 +77,7 @@ public class StepService {
                         int prevStepID = resultSet.getInt("previousStep");
                         String image = resultSet.getString("image");
                         if (prevStepID == 0) step = new Step(desc, id, Base64machine.isBase64(image, 0, id, ""), image); else
-                            step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), Base64machine.isBase64(image, 0, id, ""), image);
+                            step = new Step(desc, id, StepController.getStepByid(resultSet.getInt("previousStep")), Base64machine.isBase64(image, 0, id, ""), image);
                         sol.add(step);
                     } while (resultSet.next());
                 }
@@ -121,7 +122,7 @@ public class StepService {
                     int prevStepID = resultSet.getInt("previousStep");
                     String image = resultSet.getString("image");
                     if (prevStepID == 0) step = new Step(desc, id, Base64machine.isBase64(image, 0, id, ""), image); else
-                        step = new Step(desc, id, getStepById(resultSet.getInt("previousStep")).orElse(null), Base64machine.isBase64(image, 0, id, ""), image);
+                        step = new Step(desc, id, StepController.getStepByid(resultSet.getInt("previousStep")), Base64machine.isBase64(image, 0, id, ""), image);
                 } while (resultSet.next());
             }
         } catch (Exception e) {

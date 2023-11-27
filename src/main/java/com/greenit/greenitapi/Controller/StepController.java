@@ -38,12 +38,14 @@ public class StepController {
 
     @GetMapping("/prevstep")
     public static List<Step> getStepByPrevId(@RequestParam int previd) {
-        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/prevstep", previd)));
-        if(cached != null) return (List<Step>) cached.getBody();
+        //cache eliminada por errores eldritch que no se descifrar
+
+        //Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/prevstep", previd)));
+        //if(cached != null) return (List<Step>) cached.getBody();
         List<Step> step;
         try{
         step = StepService.getStepByPrevId(previd).orElse(null);}catch(Exception e){return new ArrayList<>();}
-        Cache.addToCache(new Request().setBody(List.of("/prevstep", previd)), new Response().setBody(step));
+        //Cache.addToCache(new Request().setBody(List.of("/prevstep", previd)), new Response().setBody(step));
         if(step == null) return new ArrayList<>();
         return step;
     }

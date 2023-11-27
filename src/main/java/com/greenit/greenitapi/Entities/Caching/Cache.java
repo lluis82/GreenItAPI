@@ -19,8 +19,10 @@ public class Cache {
     }
 
     public static Response getFromCache(Request r){
-        if(!cache.containsKey(r)) return null;
-        System.out.println("CACHE HIT!!");
+        if(!cache.containsKey(r)){
+            System.out.println("CACHE MISS EN " + r.getBody().toString());
+            return null;}
+        System.out.println("CACHE HIT!! EN " +  r.getBody().toString() + " " + cache.get(r).getBody());
         return cache.get(r);
     }
 
