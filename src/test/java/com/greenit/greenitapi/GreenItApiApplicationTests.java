@@ -139,7 +139,7 @@ class GreenItApiApplicationTests {
     @Test
     public void test() throws InterruptedException {
         //webdriver.get("http://www.google.com/");
-        webdriver.get("http://localhost:8080/rrsspost?postid=12");
+        webdriver.get("http://16.170.159.93/rrsspost?postid=12");
         Thread.sleep(2000);
     }
 
