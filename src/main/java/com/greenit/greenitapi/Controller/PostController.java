@@ -37,12 +37,12 @@ public class PostController {
 
     @GetMapping("/postById")
     public static Post getPostById(@RequestParam int id) {
-        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/post", id)));
-        if(cached != null) return null;
+        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/postById", id)));
+        if(cached != null) return (Post) cached.getBody().get(0);
         Post post;
         try{
             post = PostService.getPostById(id).orElse(null);}catch(Exception e){return null;}
-        Cache.addToCache(new Request().setBody(List.of("/post", id)), new Response().setBody(List.of(post)));
+        Cache.addToCache(new Request().setBody(List.of("/postById", id)), new Response().setBody(List.of(post)));
         if(post == null) return null;
         return post;
     }

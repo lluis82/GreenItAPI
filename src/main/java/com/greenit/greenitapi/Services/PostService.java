@@ -1,5 +1,6 @@
 package com.greenit.greenitapi.Services;
 
+import com.greenit.greenitapi.Controller.StepController;
 import com.greenit.greenitapi.Controller.UserController;
 import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Entities.Step;
@@ -87,7 +88,7 @@ public class PostService {
                     Step firstStep = null;
                     try {
                         int idstep = resultSet.getInt("firstStep");
-                        firstStep = StepService.getStepById(idstep).orElse(null);
+                        firstStep = StepController.getStepByid(idstep);
                     }catch(Exception e){}
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");

@@ -1,7 +1,6 @@
 package com.greenit.greenitapi;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,12 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 
 import java.time.Duration;
 
@@ -123,25 +121,26 @@ class GreenItApiApplicationTests {
     @BeforeAll
     public static void beforeClass()
     {
-        WebDriverManager.chromedriver().setup();
-        WebDriverManager.firefoxdriver().setup();
+        //WebDriverManager.chromedriver().setup();
+        //WebDriverManager.firefoxdriver().setup();
         WebDriverManager.edgedriver().setup();
     }
     @BeforeEach
     public void beforeMethod()
     {
-        webdriver=new ChromeDriver();
+        webdriver=new EdgeDriver();
         webdriver.manage().window().maximize();
     }
     @AfterEach
-    public  void AfterMethod()
+    public void AfterMethod()
     {
         webdriver.close();
     }
     @Test
-    public  void test()
-    {
-        webdriver.get("http://www.google.com/");
+    public void test() throws InterruptedException {
+        //webdriver.get("http://www.google.com/");
+        webdriver.get("http://localhost:8080/rrsspost?postid=12");
+        Thread.sleep(2000);
     }
 
 }
