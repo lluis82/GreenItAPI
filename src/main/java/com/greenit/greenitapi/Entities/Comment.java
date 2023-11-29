@@ -18,32 +18,18 @@ public class Comment {
         return replyto;
     }
 
-    public void setReplyto(Comment replyto) {
-        this.replyto = replyto;
-    }
 
     public User getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }

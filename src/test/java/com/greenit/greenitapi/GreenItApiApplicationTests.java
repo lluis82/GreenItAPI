@@ -1,7 +1,11 @@
 package com.greenit.greenitapi;
 
 import com.greenit.greenitapi.Controller.*;
+import com.greenit.greenitapi.Entities.Caching.Response;
+import com.greenit.greenitapi.Entities.Comment;
+import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Entities.User;
+import com.greenit.greenitapi.Services.CommentService;
 import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -23,6 +27,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +48,6 @@ class GreenItApiApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].displayName").value("GreenIt enjoyer"));
-
     }
 
     @Test
@@ -51,7 +56,6 @@ class GreenItApiApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].displayName").value("hector"));
-
     }
 
     @Test
@@ -163,7 +167,8 @@ class GreenItApiApplicationTests {
 
         //endregion
         //region comments
-        CommentController.commentOnPostOrComment(0,"",12,"Aruruu");
+        CommentController.commentOnPostOrComment(0,"",47,"Aruruu");
+        CommentController.commentOnPostOrComment(CommentController.getCommentsfromPost(47).get(0).getId(),"",47,"Aruruu");
         //CACHE DE GET COMMENTS FROM POST TIENE LA CACHE MAL, DESACTIVADA
         var aaa = CommentController.getCommentsfromPost(12);
         //var bb = CommentController.getCommentsfromPost(12);
@@ -174,9 +179,75 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",cc,dd);
         //endregion
         //region rrss
-        mockMvc.perform(get("http://localhost:8080/rrssprofile?username=jrber23"));
-        mockMvc.perform(get("http://localhost:8080/rrsspost?postid=49"));
-        mockMvc.perform(get("http://localhost:8080/rrssstep?stepid=26"));
+        RRSSController.embedpost(12);
+        RRSSController.embedstep(21);
+        RRSSController.embedprofile("jrber23");
+        RRSSController.getpostimg(12);
+        RRSSController.getprofileimg("hector");//vacia
+        RRSSController.getprofileimg("jrber");//base64 correcto
+        RRSSController.getprofileimg("jrber23");//http
+        RRSSController.getprofileimg("Aruruu");//invalid base64
+        RRSSController.getstepimg(21);
+        //endregion
+        //region unitTesting
+        User user = UserController.getUserByName("Aruruu");
+        User user2 = UserController.getUserByName("jrber23");
+        assertEquals("diferentes","Aruruu", user.getDisplayName());
+        assertEquals("diferentes","aruruu@uta.es", user.getEmail());
+        assertEquals("diferentes","pass", user.getPassword());
+        assertEquals("diferentes","Touka", user.getServerName());
+
+        Post post = PostController.getPostById(12);
+        assertEquals("diferentes","localhost:8080",post.getServerName());
+
+        Comment comment = CommentController.getCommentsfromPost(43).get(0);
+        assertEquals("diferentes","hector",comment.getCreator().getDisplayName());
+        assertEquals("diferentes","ADIOS",comment.getText());
+        assertEquals("diferentes",4,comment.getId());
+        assertEquals("diferentes",null,comment.getReplyto());
+        Comment reply = CommentController.getRepliesFromCommentID(4).get(0);
+        assertEquals("diferentes",comment.getId(),reply.getReplyto().getId());
+
+
+        Response response1 = new Response();
+        Response response2 = new Response();
+        response1.setBody(List.of(user, user2));
+        response2.setBody(List.of(user, user2));
+        assertEquals("diferentes", response1, response2);
+        assertEquals("diferentes", response1.getBody(), response2.getBody());
+        assertEquals("diferentes",response1.hashCode(), response2.hashCode());
+        assertEquals("diferentes", true, response1.equals(response2));
+        assertEquals("diferentes", true, response2.equals(response1));
+        //endregion
+        //region unitTestingErrors
+        assertEquals("diferentes",new ArrayList<>(),CommentController.getCommentsfromPost(444343));
+        assertEquals("diferentes",new ArrayList<>(),CommentController.getRepliesFromCommentID(545454));
+        assertEquals("diferentes",true,CommentController.commentOnPostOrComment(-545,"dsfds",243423,"ygddgf").contains("FAIL"));
+        assertEquals("diferentes",true,CommentController.commentOnPostOrComment(545,"dsfds",243423,"ygddgf").contains("FAIL"));
+        assertEquals("diferentes",null, CommentService.getCommentByID(-59));
+
+        assertEquals("diferentes",new ArrayList<>(),PostController.getAllPosts(-1));
+        assertEquals("diferentes",new ArrayList<>(),PostController.getPostByUser("gfdgdfgdfgdf"));
+        assertEquals("diferentes",null,PostController.getPostById(32423));
+        assertEquals("diferentes",0,PostController.getCountOfUserPosts("gfdgdfdgf"));
+        assertEquals("diferentes", true, PostController.publishPost("gfddfgfd","gdfgdf","gdfgdfgdf").contains("FAIL"));
+
+        assertEquals("diferentes",true,LikeController.checklike(-4,"gfdgdf").contains("false"));
+        assertEquals("diferentes",0,LikeController.howmanylikes(-4));
+        assertEquals("diferentes",true,LikeController.like("gfdf",-1).contains("FAIL"));
+        assertEquals("diferentes",true,LikeController.unlike("gfdgdf",-76).contains("OK"));
+
+        assertEquals("diferentes",0,ReducedUserController.getFollowedCount(-45));
+        assertEquals("diferentes",0,ReducedUserController.getFollowersCount(-45));
+        assertEquals("diferentes",new ArrayList<>(),ReducedUserController.getFollowedbyUser(-45));
+        assertEquals("diferentes",new ArrayList<>(),ReducedUserController.getUserFollowers(-45));
+        assertEquals("diferentes",true,ReducedUserController.newFollower(-65,-64).contains("FAIL"));
+        assertEquals("diferentes",true,ReducedUserController.deleteFollower(-65,-64).contains("OK"));
+        assertEquals("diferentes",false,ReducedUserController.checkFollows(-65,-64));
+
+
+        System.out.println(ServerController.stats());
+
         //endregion
     }
 
@@ -190,7 +261,7 @@ class GreenItApiApplicationTests {
         } catch (Exception e){}
     }
     @Test
-    public void testDBConnectionBuffer(){
+    public void testDBSingleRequestAttack(){
         Thread t1 = new Thread(() -> {testconnectiondb();});
         Thread t2 = new Thread(() -> {testconnectiondb();});
         Thread t3 = new Thread(() -> {testconnectiondb();});
@@ -240,7 +311,7 @@ class GreenItApiApplicationTests {
     }
 
     @Test
-    public void Selenium() throws Exception {
+    public void SeleniumRemoto() throws Exception {
         WebDriverManager.edgedriver().setup();
         webdriver=new EdgeDriver();
         webdriver.manage().window().maximize();

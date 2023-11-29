@@ -1,6 +1,5 @@
 package com.greenit.greenitapi.Util;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Entities.Step;
 import com.greenit.greenitapi.Entities.User;

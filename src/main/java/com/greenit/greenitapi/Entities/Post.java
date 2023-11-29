@@ -25,18 +25,6 @@ public class Post {
     public User getCreator() {
         return creator;
     }
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public void setFirstStep(Step firstStep) {
-        this.firstStep = firstStep;
-    }
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
     public String getServerName() {
         return serverName;
     }

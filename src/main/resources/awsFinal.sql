@@ -9,8 +9,8 @@
 
 DELETE FROM `comments`;
 INSERT INTO `comments` (`id`, `creator`, `replyto`, `text`, `postid`) VALUES
-                                                                          (4, 13, NULL, '', 12),
-                                                                          (5, 13, 4, '', 12),
+                                                                          (4, 13, NULL, 'ADIOS', 43),
+                                                                          (5, 13, 4, 'HOLA', 43),
                                                                           (6, 13, 4, '', 12),
                                                                           (7, 13, NULL, 'asdf', 12),
                                                                           (8, 13, 7, 'probando comentarios', 12),
@@ -72,7 +72,7 @@ INSERT INTO `step` (`id`, `description`, `previousStep`, `image`) VALUES
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `userName`, `password`, `email`, `image`, `description`) VALUES
                                                                                         (13, 'hector', 'pass', 'a@b.es', '', 'hola'),
-                                                                                        (14, 'jrber', 'pollagorda', 'kalar@gmail.com', '', ''),
+                                                                                        (14, 'jrber', 'pollagorda', 'kalar@gmail.com', 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', ''),
                                                                                         (15, 'rizna', 'yourPassword', 'rizna@gmail.com', 'https://fcb-abj-pre.s3.amazonaws.com/img/jugadors/LEWANDOWSKI-min.jpg', 'adre2'),
                                                                                         (16, 'jrber23', '1234', 'jrber23@gmail.com', 'https://i.pinimg.com/474x/61/8b/bf/618bbf80468e9cdae2aef327df83bf09.jpg', 'Hola new copy link working: http://16.170.159.93/getUserByName?username=jrber23Hola new copy link working: http://16.170.159.93/getUserByName?username=jrber23'),
                                                                                         (17, 'Test display WN', 'password123', 'doesitworkWN@gmail.com', 'https://fcb-abj-pre.s3.amazonaws.com/img/jugadors/LEWANDOWSKI-min.jpg', ''),

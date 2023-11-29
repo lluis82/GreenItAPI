@@ -63,4 +63,9 @@ public class ServerController {
         return c.getSrvName() + " OK";
     }
 
+    @GetMapping("/statscache")
+    public static String stats(){
+        return Cache.stats();
+    }
+
 }

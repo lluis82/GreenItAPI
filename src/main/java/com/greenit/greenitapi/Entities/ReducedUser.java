@@ -18,31 +18,19 @@ public class ReducedUser {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
 
     public String getImage() {
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getImagefield() {
         return imagefield;
     }
 
-    public void setImagefield(String imagefield) {
-        this.imagefield = imagefield;
-    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }
