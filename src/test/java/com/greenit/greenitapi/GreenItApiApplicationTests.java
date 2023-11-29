@@ -71,7 +71,7 @@ class GreenItApiApplicationTests {
         //endregion
         //region user
         UserController.register("g@h.es","pass","Aruruu","","");
-        UserController.updateUser(UserController.getUserByName("Aruruu").getId(),"aruruu@uta.es","pass","Aruruu","","Uta FTW");
+        UserController.updateUser(UserController.getUserByName("Aruruu").getId(),"aruruu@uta.es","pass","Aruruu","iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=","Uta FTW");
         var e = UserController.getUser("a@b.es");
         var f = UserController.getUser("a@b.es");
         assertEquals("diferentes",e,f);
@@ -233,14 +233,14 @@ class GreenItApiApplicationTests {
         t19.start();
         t20.start();
         try {
-            Thread.sleep(30000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void test() throws Exception {
+    public void Selenium() throws Exception {
         WebDriverManager.edgedriver().setup();
         webdriver=new EdgeDriver();
         webdriver.manage().window().maximize();
