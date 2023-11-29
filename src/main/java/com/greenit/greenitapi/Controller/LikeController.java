@@ -22,7 +22,7 @@ public class LikeController {
     }
 
     @GetMapping("/like")
-    public static String getPostByUser(@RequestParam String username, @RequestParam int postid) {
+    public static String like(@RequestParam String username, @RequestParam int postid) {
         String sol = LikeService.like(username, postid);
         if(sol.contains("OK")) Cache.deleteFromCache(new Request().setBody(List.of("/howmanylikes", postid)));
         if(sol.contains("OK")) Cache.deleteFromCache(new Request().setBody(List.of("/ispostalreadyliked", postid, username)));
@@ -30,7 +30,7 @@ public class LikeController {
     }
 
     @GetMapping("/unlike")
-    public static String likePost(@RequestParam String username, @RequestParam int postid) {
+    public static String unlike(@RequestParam String username, @RequestParam int postid) {
         String sol = LikeService.unlike(username, postid);
         if(sol.contains("OK")) Cache.deleteFromCache(new Request().setBody(List.of("/howmanylikes", postid)));
         if(sol.contains("OK")) Cache.deleteFromCache(new Request().setBody(List.of("/ispostalreadyliked", postid, username)));

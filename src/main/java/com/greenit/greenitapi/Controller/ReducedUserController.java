@@ -51,7 +51,7 @@ public class ReducedUserController {
     }
 
     @GetMapping("/addNewFollower")
-    public String newFollower(@RequestParam int userId, @RequestParam int followedUserId){
+    public static String newFollower(@RequestParam int userId, @RequestParam int followedUserId){
         String sol = ReducedUserService.newFollower(userId, followedUserId);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followersUser", followedUserId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followedByUser", userId)));
@@ -62,7 +62,7 @@ public class ReducedUserController {
     }
 
     @GetMapping("/unfollow")
-    public String deleteFollower(@RequestParam int userId, @RequestParam int unfollowedUserId){
+    public static String deleteFollower(@RequestParam int userId, @RequestParam int unfollowedUserId){
         String sol = ReducedUserService.deleteFollower(userId, unfollowedUserId);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followersUser", unfollowedUserId)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/followedByUser", userId)));

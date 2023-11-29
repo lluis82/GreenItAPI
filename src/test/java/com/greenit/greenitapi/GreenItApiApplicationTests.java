@@ -1,6 +1,7 @@
 package com.greenit.greenitapi;
 
 import com.greenit.greenitapi.Controller.*;
+import com.greenit.greenitapi.Entities.User;
 import com.greenit.greenitapi.Util.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Test;
@@ -48,8 +49,9 @@ class GreenItApiApplicationTests {
 
     @Test
     public void testBackendCache() throws Exception{
-        //region server
         mockMvc.perform(get("http://localhost:8080/purgecache")).andExpect(status().isOk()).andExpect(content().string(new Config().getSrvName() + " OK"));
+        //region server
+        ServerController.meetServer("192.168.1.1","Eruruu");
         var a = ServerController.getServers();
         var b = ServerController.getServers();
         assertEquals("diferentes",a,b);
@@ -58,6 +60,8 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",c,d);
         //endregion
         //region user
+        UserController.register("g@h.es","pass","Aruruu","","");
+        UserController.updateUser(UserController.getUserByName("Aruruu").getId(),"aruruu@uta.es","pass","Aruruu","","Uta FTW");
         var e = UserController.getUser("a@b.es");
         var f = UserController.getUser("a@b.es");
         assertEquals("diferentes",e,f);
@@ -71,13 +75,13 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",i,j);
         //endregion
         //region post
-
+        PostController.publishPost("Aruruu","","");
         var k = PostController.getPostById(12);
         var l = PostController.getPostById(12);
         assertEquals("diferentes",k,l);
 
         //GET POST BY USER TIENE LA CACHE DESACTIVADA POR PROBLEMAS
-        //var n = PostController.getPostByUser("hector");
+        var nnn = PostController.getPostByUser("hector");
         //var o = PostController.getPostByUser("hector");
         //assertEquals("diferentes",o,n);
 
@@ -103,6 +107,8 @@ class GreenItApiApplicationTests {
         //endregion
 
         //region reduceduser
+        ReducedUserController.newFollower(13,UserController.getUserByName("Aruruu").getId());
+        ReducedUserController.deleteFollower(13,UserController.getUserByName("Aruruu").getId());
         var r = ReducedUserController.getFollowedbyUser(13);
         var s = ReducedUserController.getFollowedbyUser(13);
         assertEquals("diferentes",r,s);
@@ -124,6 +130,8 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",w,x);
         //endregion
         //region like
+        LikeController.like("Aruruu",12);
+        LikeController.unlike("Aruruu",12);
         p = LikeController.howmanylikes(12);
         q = LikeController.howmanylikes(12);
         assertEquals("diferentes",p,q);
@@ -133,26 +141,32 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",y,z);
         //endregion
         //region step
+        StepController.publishStep(21,false,"",12,"");
         var ee = StepController.getStepByid(21);
         var ff = StepController.getStepByid(21);
         assertEquals("diferentes",ee,ff);
 
         //STEP BY PREVIOUS ID TIENE LA CACHE MAL, DESACTIVADA
-        //var gg = StepController.getStepByPrevId(21);
+        var ggg = StepController.getStepByPrevId(21);
         //var hh = StepController.getStepByPrevId(21);
         //assertEquals("diferentes",gg,hh);
 
         //endregion
         //region comments
-
+        CommentController.commentOnPostOrComment(0,"",12,"Aruruu");
         //CACHE DE GET COMMENTS FROM POST TIENE LA CACHE MAL, DESACTIVADA
-        //var aa = CommentController.getCommentsfromPost(12);
+        var aaa = CommentController.getCommentsfromPost(12);
         //var bb = CommentController.getCommentsfromPost(12);
         //assertEquals("diferentes",aa,bb);
 
         var cc = CommentController.getRepliesFromCommentID(4);
         var dd = CommentController.getRepliesFromCommentID(4);
         assertEquals("diferentes",cc,dd);
+        //endregion
+        //region rrss
+        mockMvc.perform(get("http://localhost:8080/rrssprofile?username=jrber23"));
+        mockMvc.perform(get("http://localhost:8080/rrsspost?postid=49"));
+        mockMvc.perform(get("http://localhost:8080/rrssstep?stepid=26"));
         //endregion
     }
 
