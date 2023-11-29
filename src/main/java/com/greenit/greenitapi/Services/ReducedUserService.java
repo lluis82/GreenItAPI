@@ -53,6 +53,7 @@ public class ReducedUserService {
         optional = Optional.of(sol);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -89,6 +90,7 @@ public class ReducedUserService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -136,6 +138,7 @@ public class ReducedUserService {
             System.out.println("Error al borrar info de la BD");
             try {
                 connection.close();
+                mariadbConnect.connclosed();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -143,6 +146,7 @@ public class ReducedUserService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -177,6 +181,7 @@ public class ReducedUserService {
             try {
                 if (connection != null && !connection.isClosed()) {
                     connection.close();
+                    mariadbConnect.connclosed();
                 }
             } catch (SQLException ex) {
                 System.out.println("Error closing connection: " + ex.getMessage());

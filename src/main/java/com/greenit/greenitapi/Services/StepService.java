@@ -37,6 +37,7 @@ public class StepService {
                 if(resultSet.next()== false){
                     try {
                         connection.close();
+                        mariadbConnect.connclosed();
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -67,6 +68,7 @@ public class StepService {
                 if(resultSet.next()== false){
                     try {
                         connection.close();
+                        mariadbConnect.connclosed();
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -88,6 +90,7 @@ public class StepService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -112,6 +115,7 @@ public class StepService {
             if(resultSet.next()== false){
                 try {
                     connection.close();
+                    mariadbConnect.connclosed();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -131,6 +135,7 @@ public class StepService {
         optional = Optional.of(step);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -159,6 +164,7 @@ public class StepService {
                     System.out.println("Error al recuperar info de la BD");
                     try {
                         connection.close();
+                        mariadbConnect.connclosed();
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -175,6 +181,7 @@ public class StepService {
                     System.out.println("Error al recuperar info de la BD");
                     try {
                         connection.close();
+                        mariadbConnect.connclosed();
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -185,6 +192,7 @@ public class StepService {
             System.out.println("Error al recuperar info de la BD");
             try {
                 connection.close();
+                mariadbConnect.connclosed();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -192,6 +200,7 @@ public class StepService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

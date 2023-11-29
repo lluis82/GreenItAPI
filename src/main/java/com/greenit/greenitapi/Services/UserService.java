@@ -49,6 +49,7 @@ public class UserService {
         optional = Optional.of(user);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -87,6 +88,7 @@ public class UserService {
         optional = Optional.of(user);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -126,6 +128,7 @@ public class UserService {
         optional = Optional.of(user);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -151,6 +154,7 @@ public class UserService {
             System.out.println("Error al recuperar info de la BD");
             try {
                 connection.close();
+                mariadbConnect.connclosed();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -158,6 +162,7 @@ public class UserService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -198,6 +203,7 @@ public class UserService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

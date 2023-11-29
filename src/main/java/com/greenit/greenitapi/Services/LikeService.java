@@ -32,6 +32,7 @@ public class LikeService {
             System.out.println("Error al recuperar info de la BD");
             try {
                 connection.close();
+                mariadbConnect.connclosed();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -39,6 +40,7 @@ public class LikeService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -63,6 +65,7 @@ public class LikeService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -82,6 +85,7 @@ public class LikeService {
             System.out.println("Error al recuperar info de la BD");
             try {
                 connection.close();
+                mariadbConnect.connclosed();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -89,6 +93,7 @@ public class LikeService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -112,6 +117,7 @@ public class LikeService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

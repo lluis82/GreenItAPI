@@ -38,6 +38,7 @@ public class CommentService {
             if (resultSet.next() == false) {
                 try {
                     connection.close();
+                    mariadbConnect.connclosed();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -60,6 +61,7 @@ public class CommentService {
         optional = Optional.of(comment);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -85,6 +87,7 @@ public class CommentService {
             if (resultSet.next() == false) {
                 try {
                     connection.close();
+                    mariadbConnect.connclosed();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -109,6 +112,7 @@ public class CommentService {
         optional = Optional.of(sol);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -134,6 +138,7 @@ public class CommentService {
             if (resultSet.next() == false) {
                 try {
                     connection.close();
+                    mariadbConnect.connclosed();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -158,6 +163,7 @@ public class CommentService {
         optional = Optional.of(sol);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -182,6 +188,7 @@ public class CommentService {
             System.out.println("Error al recuperar info de la BD");
             try {
                 connection.close();
+                mariadbConnect.connclosed();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -200,6 +207,7 @@ public class CommentService {
                 System.out.println("Error al recuperar info de la BD");
                 try {
                     connection.close();
+                    mariadbConnect.connclosed();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -209,6 +217,7 @@ public class CommentService {
 
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

@@ -1,7 +1,7 @@
 package com.greenit.greenitapi.Entities.Caching;
 
+import com.greenit.greenitapi.Util.mariadbConnect;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryUsage;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -73,6 +73,8 @@ public class Cache {
                 "\n Uso de memoria en MB (aprox): " +
                 ((ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() - heapMemoryUsage)/1024)/1024 +
                 "\n % de hits: " +
-                hits/(hits+misses+purges);
+                hits * 100.0 /(hits+misses+purges) +
+                "\n Pico de conexiones: " +
+                mariadbConnect.getPicocons();
     }
 }
