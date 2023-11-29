@@ -71,6 +71,8 @@ public class Cache {
                 "\nVeces purgada: " +
                 purges +
                 "\n Uso de memoria en MB (aprox): " +
-                ((ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() - heapMemoryUsage)/1024)/1024;
+                ((ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() - heapMemoryUsage)/1024)/1024 +
+                "\n % de hits: " +
+                hits/(hits+misses+purges);
     }
 }
