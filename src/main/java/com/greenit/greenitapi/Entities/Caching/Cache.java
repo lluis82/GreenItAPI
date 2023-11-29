@@ -70,7 +70,7 @@ public class Cache {
                 updates +
                 "\nVeces purgada: " +
                 purges +
-                "\n Uso de memoria (aprox): " +
-                (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() - heapMemoryUsage);
+                "\n Uso de memoria en MB (aprox): " +
+                ((ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() - heapMemoryUsage)/1024)/1024;
     }
 }
