@@ -57,7 +57,6 @@ public class LikeService {
             if(resultSet.next()== false){return "false";} else {
                 do {
                     sol = resultSet.getInt("CUANTOS");
-                    System.out.println(sol);
                 } while (resultSet.next());}
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD " + e);

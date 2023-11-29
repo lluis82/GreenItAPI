@@ -38,7 +38,7 @@ public class LikeController {
     }
 
     @GetMapping("/howmanylikes")
-    public static int publishPost(@RequestParam int postid) {
+    public static int howmanylikes(@RequestParam int postid) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/howmanylikes", postid)));
         if(cached != null) return (int) cached.getBody().get(0);
         int sol = LikeService.howmanylikes(postid);

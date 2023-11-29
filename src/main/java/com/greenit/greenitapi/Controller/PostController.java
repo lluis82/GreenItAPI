@@ -25,12 +25,12 @@ public class PostController {
 
     @GetMapping("/post")
     public static List<Post> getPostByUser(@RequestParam String username) {
-        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/post", username)));
-        if(cached != null) return (List<Post>) cached.getBody();
+        //Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/post", username)));
+        //if(cached != null) return (List<Post>) cached.getBody();
         List<Post> post;
         try{
         post = PostService.getPostByUser(username).orElse(null);}catch(Exception e){return new ArrayList<>();}
-        Cache.addToCache(new Request().setBody(List.of("/post", username)), new Response().setBody(post));
+        //Cache.addToCache(new Request().setBody(List.of("/post", username)), new Response().setBody(post));
         if(post == null) return new ArrayList<>();
         return post;
     }

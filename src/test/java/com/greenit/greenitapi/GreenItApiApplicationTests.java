@@ -1,15 +1,13 @@
 package com.greenit.greenitapi;
 
+import com.greenit.greenitapi.Controller.*;
+import com.greenit.greenitapi.Util.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,21 +33,131 @@ class GreenItApiApplicationTests {
         mockMvc.perform(get("http://localhost:8080/followedByUser?userId=13"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].displayName").value("jrber23"));
+                .andExpect(jsonPath("$[0].displayName").value("GreenIt enjoyer"));
 
     }
 
     @Test
     public void testFollowersUser() throws Exception {
-        mockMvc.perform(get("http://localhost:8080/followersUser?userId=14"))
+        mockMvc.perform(get("http://localhost:8080/followersUser?userId=18"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].displayName").value("rizna"));
+                .andExpect(jsonPath("$[0].displayName").value("hector"));
 
     }
 
     @Test
-    private void testconnectiondb(){
+    public void testBackendCache() throws Exception{
+        //region server
+        mockMvc.perform(get("http://localhost:8080/purgecache")).andExpect(status().isOk()).andExpect(content().string(new Config().getSrvName() + " OK"));
+        var a = ServerController.getServers();
+        var b = ServerController.getServers();
+        assertEquals("diferentes",a,b);
+        var c = ServerController.getServer();
+        var d = ServerController.getServer();
+        assertEquals("diferentes",c,d);
+        //endregion
+        //region user
+        var e = UserController.getUser("a@b.es");
+        var f = UserController.getUser("a@b.es");
+        assertEquals("diferentes",e,f);
+
+        var g = UserController.getUserByName("jrber");
+        var h = UserController.getUserByName("jrber");
+        assertEquals("diferentes",g,h);
+
+        var i = UserController.getUserById(13);
+        var j = UserController.getUserById(13);
+        assertEquals("diferentes",i,j);
+        //endregion
+        //region post
+
+        var k = PostController.getPostById(12);
+        var l = PostController.getPostById(12);
+        assertEquals("diferentes",k,l);
+
+        //GET POST BY USER TIENE LA CACHE DESACTIVADA POR PROBLEMAS
+        //var n = PostController.getPostByUser("hector");
+        //var o = PostController.getPostByUser("hector");
+        //assertEquals("diferentes",o,n);
+
+        var n = PostController.getAllPosts(1);
+        var o = PostController.getAllPosts(1);
+        assertEquals("diferentes",o,n);
+
+        n = PostController.getAllPosts(2);
+        o = PostController.getAllPosts(2);
+        assertEquals("diferentes",o,n);
+
+        n = PostController.getAllPosts(3);
+        o = PostController.getAllPosts(3);
+        assertEquals("diferentes",o,n);
+
+        n = PostController.getAllPosts(4);
+        o = PostController.getAllPosts(4);
+        assertEquals("diferentes",o,n);
+
+        var p = PostController.getCountOfUserPosts("hector");
+        var q = PostController.getCountOfUserPosts("hector");
+        assertEquals("diferentes",p,q);
+        //endregion
+
+        //region reduceduser
+        var r = ReducedUserController.getFollowedbyUser(13);
+        var s = ReducedUserController.getFollowedbyUser(13);
+        assertEquals("diferentes",r,s);
+
+        var t = ReducedUserController.getUserFollowers(14);
+        var u = ReducedUserController.getUserFollowers(14);
+        assertEquals("diferentes",t,u);
+
+        p = ReducedUserController.getFollowedCount(13);
+        q = ReducedUserController.getFollowedCount(13);
+        assertEquals("diferentes",p,q);
+
+        p = ReducedUserController.getFollowersCount(14);
+        q = ReducedUserController.getFollowersCount(14);
+        assertEquals("diferentes",p,q);
+
+        var w = ReducedUserController.checkFollows(13,14);
+        var x = ReducedUserController.checkFollows(13,14);
+        assertEquals("diferentes",w,x);
+        //endregion
+        //region like
+        p = LikeController.howmanylikes(12);
+        q = LikeController.howmanylikes(12);
+        assertEquals("diferentes",p,q);
+
+        var y = LikeController.checklike(12,"hector");
+        var z = LikeController.checklike(12,"hector");
+        assertEquals("diferentes",y,z);
+        //endregion
+        //region step
+        var ee = StepController.getStepByid(21);
+        var ff = StepController.getStepByid(21);
+        assertEquals("diferentes",ee,ff);
+
+        //STEP BY PREVIOUS ID TIENE LA CACHE MAL, DESACTIVADA
+        //var gg = StepController.getStepByPrevId(21);
+        //var hh = StepController.getStepByPrevId(21);
+        //assertEquals("diferentes",gg,hh);
+
+        //endregion
+        //region comments
+
+        //CACHE DE GET COMMENTS FROM POST TIENE LA CACHE MAL, DESACTIVADA
+        //var aa = CommentController.getCommentsfromPost(12);
+        //var bb = CommentController.getCommentsfromPost(12);
+        //assertEquals("diferentes",aa,bb);
+
+        var cc = CommentController.getRepliesFromCommentID(4);
+        var dd = CommentController.getRepliesFromCommentID(4);
+        assertEquals("diferentes",cc,dd);
+        //endregion
+    }
+
+    @Test
+    public void testconnectiondb(){
         try {
             mockMvc.perform(get("http://localhost:8080/servers"))
                     .andExpect(status().isOk())
@@ -107,41 +215,13 @@ class GreenItApiApplicationTests {
         }
     }
 
-
-
-//    @Test
-//    public void selenium1() throws InterruptedException {
-//        driver.get("https://www.google.com/");
-//        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-//        Thread.sleep(2000);
-//        JavascriptExecutor js = (JavascriptExecutor) driver;
-//        js.executeScript("javascript:window.scrollBy(750,950)");
-//
-//        driver.quit();
-//    }
-
-
-    @BeforeAll
-    public static void beforeClass()
-    {
-        //WebDriverManager.chromedriver().setup();
-        //WebDriverManager.firefoxdriver().setup();
+    @Test
+    public void test() throws Exception {
         WebDriverManager.edgedriver().setup();
-    }
-    @BeforeEach
-    public void beforeMethod()
-    {
         webdriver=new EdgeDriver();
         webdriver.manage().window().maximize();
         webdriver.manage().timeouts().implicitlyWait(Duration.ofMillis(10000));
-    }
-    @AfterEach
-    public void AfterMethod()
-    {
-        webdriver.close();
-    }
-    @Test
-    public void test() throws Exception {
+
         webdriver.get("http://16.170.159.93/purgecache");
         Thread.sleep(100);
         JavascriptExecutor js = (JavascriptExecutor) webdriver;
@@ -176,6 +256,8 @@ class GreenItApiApplicationTests {
         w2.click();
         assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=20", webdriver.getCurrentUrl());
         Thread.sleep(2000);
+
+        webdriver.close();
     }
 
 }

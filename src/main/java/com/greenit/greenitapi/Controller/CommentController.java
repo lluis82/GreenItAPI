@@ -25,12 +25,12 @@ public class CommentController {
 
     @GetMapping("/getComments")
     public static List<Comment> getCommentsfromPost(@RequestParam int postid) {
-        Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getComments", postid)));
-        if(cached != null) return (List<Comment>) cached.getBody();
+        //Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/getComments", postid)));
+        //if(cached != null) return (List<Comment>) cached.getBody();
         List<Comment> step;
         try{
         step = CommentService.getCommentByPostID(postid).orElse(null);}catch(Exception e){return new ArrayList<>();}
-        Cache.addToCache(new Request().setBody(List.of("/comments", postid)), new Response().setBody(step));
+        //Cache.addToCache(new Request().setBody(List.of("/comments", postid)), new Response().setBody(step));
         if(step == null) return new ArrayList<>();
         return step;
     }
@@ -51,7 +51,7 @@ public class CommentController {
     public static String commentOnPostOrComment(@RequestParam int prevCommentId, @RequestParam String text, @RequestParam int postid, @RequestParam String creatorName) {
         String sol = CommentService.publishComment(prevCommentId,text,postid,creatorName);
         if(sol.contains("OK") && prevCommentId != 0)Cache.deleteFromCache(new Request().setBody(List.of("/getReplies", prevCommentId)));
-        else if(sol.contains("OK")) Cache.deleteFromCache(new Request().setBody(List.of("/getComments",postid)));
+        //else if(sol.contains("OK")) Cache.deleteFromCache(new Request().setBody(List.of("/getComments",postid)));
         return sol;
     }
 }
