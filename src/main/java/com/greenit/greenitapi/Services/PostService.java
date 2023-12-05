@@ -51,7 +51,8 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
                     sol.add(post);
                 } while (resultSet.next());
             }
@@ -94,7 +95,8 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
                 } while (resultSet.next());
             }
         } catch (Exception e) {
@@ -110,15 +112,16 @@ public class PostService {
         return optional;
     }
 
-    public static String publishPost(String username, String description, String image) {
+    public static String publishPost(String username, String description, String image, String title) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""
-                    INSERT INTO posts (servername, firstStep, creator, description, image) VALUES (?, null, (SELECT u.id from users u where u.username like ?), ?, ?)
+                    INSERT INTO posts (servername, firstStep, creator, description, image, title) VALUES (?, null, (SELECT u.id from users u where u.username like ?), ?, ?, ?)
                 """)) {
             statement.setString(1,config.getSrvIp());
             statement.setString(2,username);
             statement.setString(3,description);
             statement.setString(4,image);
+            statement.setString(5,title);
             statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
@@ -168,7 +171,8 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
                     sol.add(post);
                 } while (resultSet.next());
             }

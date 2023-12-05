@@ -60,8 +60,8 @@ public class PostController {
     }
 
     @GetMapping("/publish")
-    public static String publishPost(@RequestParam String username, @RequestParam String description, @RequestParam String image) {
-        String sol = PostService.publishPost(username, description, image);
+    public static String publishPost(@RequestParam String username, @RequestParam String description, @RequestParam String image, @RequestParam String title) {
+        String sol = PostService.publishPost(username, description, image,title);
         if(sol.contains("OK"))Cache.deleteIterableCustomFromCache(new Request().setBody(List.of("/postsPaged")));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/post", username)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getCountOfUserPosts", username)));

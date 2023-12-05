@@ -89,7 +89,7 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",i,j);
         //endregion
         //region post
-        PostController.publishPost("Aruruu","","");
+        PostController.publishPost("Aruruu","","","");
         var k = PostController.getPostById(12);
         var l = PostController.getPostById(12);
         assertEquals("diferentes",k,l);
@@ -230,7 +230,7 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",new ArrayList<>(),PostController.getPostByUser("gfdgdfgdfgdf"));
         assertEquals("diferentes",null,PostController.getPostById(32423));
         assertEquals("diferentes",0,PostController.getCountOfUserPosts("gfdgdfdgf"));
-        assertEquals("diferentes", true, PostController.publishPost("gfddfgfd","gdfgdf","gdfgdfgdf").contains("FAIL"));
+        assertEquals("diferentes", true, PostController.publishPost("gfddfgfd","gdfgdf","gdfgdfgdf","gfgf").contains("FAIL"));
 
         assertEquals("diferentes",true,LikeController.checklike(-4,"gfdgdf").contains("false"));
         assertEquals("diferentes",0,LikeController.howmanylikes(-4));
