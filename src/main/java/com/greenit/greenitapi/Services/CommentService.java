@@ -77,7 +77,7 @@ public class CommentService {
         try (PreparedStatement statement = connection.prepareStatement("""
                     SELECT *
                     FROM comments s
-                    WHERE s.postid like ?
+                    WHERE s.postid like ? and s.replyto is null
                 """)) {
 
             statement.setInt(1, postid);
