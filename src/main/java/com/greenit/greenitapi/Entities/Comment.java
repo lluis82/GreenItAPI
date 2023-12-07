@@ -4,14 +4,16 @@ public class Comment {
     private User creator;
     private String text;
     private int id;
-
     private Comment replyto;
 
-    public Comment(User creator, int id, String text, Comment replyto){
+    private String fecha;
+
+    public Comment(User creator, int id, String text, Comment replyto, String fecha){
         this.creator = creator;
         this.id=id;
         this.text=text;
         this.replyto=replyto;
+        this.fecha = fecha;
     }
 
     public Comment getReplyto() {
@@ -27,9 +29,9 @@ public class Comment {
         return text;
     }
 
-
     public int getId() {
         return id;
     }
+    public String getFecha(){return fecha;}
 
 }

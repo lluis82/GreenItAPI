@@ -4,6 +4,8 @@ import com.greenit.greenitapi.Util.Config;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -26,5 +28,6 @@ public class GreenItApiApplication {
             System.out.println("No se pudo encontrar el ASCII art para el nombre del server " + e);
         }
         System.out.println("Corriendo sobre: " + System.getProperty("os.name"));
+        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 }
