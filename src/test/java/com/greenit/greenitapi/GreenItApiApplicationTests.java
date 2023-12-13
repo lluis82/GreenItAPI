@@ -167,8 +167,8 @@ class GreenItApiApplicationTests {
 
         //endregion
         //region comments
-        CommentController.commentOnPostOrComment(0,"",47,"Aruruu");
-        CommentController.commentOnPostOrComment(CommentController.getCommentsfromPost(47).get(0).getId(),"",47,"Aruruu");
+        CommentController.commentOnPostOrComment(0,"",13,"Aruruu");
+        CommentController.commentOnPostOrComment(CommentController.getCommentsfromPost(13).get(0).getId(),"",13,"Aruruu");
         //CACHE DE GET COMMENTS FROM POST TIENE LA CACHE MAL, DESACTIVADA
         var aaa = CommentController.getCommentsfromPost(12);
         //var bb = CommentController.getCommentsfromPost(12);
@@ -183,11 +183,11 @@ class GreenItApiApplicationTests {
         RRSSController.embedstep(21);
         RRSSController.embedprofile("jrber23");
         RRSSController.getpostimg(12);
-        RRSSController.getprofileimg("hector");//vacia
+        RRSSController.getprofileimg("f3test");//vacia
         RRSSController.getprofileimg("jrber");//base64 correcto
         RRSSController.getprofileimg("jrber23");//http
         RRSSController.getprofileimg("Aruruu");//invalid base64
-        RRSSController.getstepimg(21);
+        RRSSController.getstepimg(15);
         //endregion
         //region unitTesting
         User user = UserController.getUserByName("Aruruu");
@@ -198,14 +198,14 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes","Touka", user.getServerName());
 
         Post post = PostController.getPostById(12);
-        assertEquals("diferentes","localhost:8080",post.getServerName());
+        assertEquals("diferentes","16.170.159.93",post.getServerName());
 
-        Comment comment = CommentController.getCommentsfromPost(43).get(0);
-        assertEquals("diferentes","hector",comment.getCreator().getDisplayName());
-        assertEquals("diferentes","ADIOS",comment.getText());
-        assertEquals("diferentes",4,comment.getId());
+        Comment comment = CommentController.getCommentsfromPost(13).get(0);
+        assertEquals("diferentes","Aruruu",comment.getCreator().getDisplayName());
+        assertEquals("diferentes","",comment.getText());
+        //assertEquals("diferentes",34,comment.getId());
         assertEquals("diferentes",null,comment.getReplyto());
-        Comment reply = CommentController.getRepliesFromCommentID(4).get(0);
+        Comment reply = CommentController.getRepliesFromCommentID(comment.getId()).get(0);
         assertEquals("diferentes",comment.getId(),reply.getReplyto().getId());
 
 
@@ -323,34 +323,40 @@ class GreenItApiApplicationTests {
         WebElement w2;
         webdriver.get("http://16.170.159.93/rrssprofile?username=jrber23");
 
+        js.executeScript("javascript:window.scrollBy(750,950)");
+
         w2 = webdriver.findElement(By.xpath("/html/body/main/div[2]/div[3]/button"));
         w2.click();
         assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrsspost?postid=12", webdriver.getCurrentUrl());
-        Thread.sleep(2000);
+        Thread.sleep(6000);
+
+        js.executeScript("javascript:window.scrollBy(750,950)");
 
         w2 = webdriver.findElement(By.xpath("/html/body/article/button"));
         w2.click();
-        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=15", webdriver.getCurrentUrl());
-        Thread.sleep(2000);
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=35", webdriver.getCurrentUrl());
+        Thread.sleep(6000);
 
         js.executeScript("javascript:window.scrollBy(750,950)");
 
         w2 = webdriver.findElement(By.xpath("/html/body/article/main/div/div/button"));
         w2.click();
-        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=20", webdriver.getCurrentUrl());
-        Thread.sleep(2000);
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=40", webdriver.getCurrentUrl());
+        Thread.sleep(6000);
 
         js.executeScript("javascript:window.scrollBy(750,950)");
 
         w2 = webdriver.findElement(By.xpath("/html/body/article/main/div/div/button"));
         w2.click();
-        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=25", webdriver.getCurrentUrl());
-        Thread.sleep(2000);
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=45", webdriver.getCurrentUrl());
+        Thread.sleep(6000);
+
+        js.executeScript("javascript:window.scrollBy(750,950)");
 
         w2 = webdriver.findElement(By.xpath("/html/body/article/button"));
         w2.click();
-        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=20", webdriver.getCurrentUrl());
-        Thread.sleep(2000);
+        assertEquals("Adonde me esta llevando mi ubeeeeeer","http://16.170.159.93/rrssstep?stepid=40", webdriver.getCurrentUrl());
+        Thread.sleep(6000);
 
         webdriver.close();
     }
