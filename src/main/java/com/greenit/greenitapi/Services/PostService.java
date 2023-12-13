@@ -23,6 +23,52 @@ public class PostService {
     private static Connection connection;
     private static Config config = new Config();
 
+    public static Optional<List<Post>> getPostsSavedByUser(String username){
+        Optional<List<Post>> optional;
+        Post post = null;
+        List<Post> sol = new ArrayList<>();
+        connection = mariadbConnect.mdbconn();
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM posts p
+                    WHERE p.id in (SELECT POST FROM likes l WHERE l.user = ?)
+                """)) {
+            statement.setInt(1, UserController.getUserByName(username).getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    //User creator = UserService.getUserByName(username).orElse(null);
+                    User creator = UserController.getUserByName(username);
+                    Step firstStep = null;
+                    int id = resultSet.getInt("id");
+                    try {
+                        int idstep = resultSet.getInt("firstStep");
+                        firstStep = StepService.getStepById(idstep).orElse(null);
+
+                    }catch(Exception e){}
+                    String servername = resultSet.getString("serverName");
+                    String image = resultSet.getString("image");
+                    String description = resultSet.getString("description");
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
+                    sol.add(post);
+                } while (resultSet.next());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+        }
+        optional = Optional.of(sol);
+        try {
+            connection.close();
+            mariadbConnect.connclosed();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return optional;
+    }
+
     public static Optional<List<Post>> getPostByUser(String username){
         Optional<List<Post>> optional;
         Post post = null;

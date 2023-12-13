@@ -35,6 +35,16 @@ public class PostController {
         return post;
     }
 
+    @GetMapping("/postSavedByUser")
+    public static List<Post> getPostsSavedByUser(@RequestParam String username) {
+        List<Post> post;
+        try{
+            post = PostService.getPostsSavedByUser(username).orElse(null);
+        }catch(Exception e) {return new ArrayList<>();}
+        if(post == null) return new ArrayList<>();
+        return post;
+    }
+
     @GetMapping("/postById")
     public static Post getPostById(@RequestParam int id) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/postById", id)));
