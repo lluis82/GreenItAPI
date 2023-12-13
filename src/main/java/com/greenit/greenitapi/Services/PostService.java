@@ -23,6 +23,52 @@ public class PostService {
     private static Connection connection;
     private static Config config = new Config();
 
+    public static Optional<List<Post>> getPostsSavedByUser(String username){
+        Optional<List<Post>> optional;
+        Post post = null;
+        List<Post> sol = new ArrayList<>();
+        connection = mariadbConnect.mdbconn();
+
+        try (PreparedStatement statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM posts p
+                    WHERE p.id in (SELECT POST FROM likes l WHERE l.user = ?)
+                """)) {
+            statement.setInt(1, UserController.getUserByName(username).getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()== false){return null;} else {
+                do {
+                    //User creator = UserService.getUserByName(username).orElse(null);
+                    User creator = UserController.getUserByName(username);
+                    Step firstStep = null;
+                    int id = resultSet.getInt("id");
+                    try {
+                        int idstep = resultSet.getInt("firstStep");
+                        firstStep = StepService.getStepById(idstep).orElse(null);
+
+                    }catch(Exception e){}
+                    String servername = resultSet.getString("serverName");
+                    String image = resultSet.getString("image");
+                    String description = resultSet.getString("description");
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
+                    sol.add(post);
+                } while (resultSet.next());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al recuperar info de la BD");
+        }
+        optional = Optional.of(sol);
+        try {
+            connection.close();
+            mariadbConnect.connclosed();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return optional;
+    }
+
     public static Optional<List<Post>> getPostByUser(String username){
         Optional<List<Post>> optional;
         Post post = null;
@@ -51,7 +97,8 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
                     sol.add(post);
                 } while (resultSet.next());
             }
@@ -61,6 +108,7 @@ public class PostService {
         optional = Optional.of(sol);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -93,7 +141,8 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
                 } while (resultSet.next());
             }
         } catch (Exception e) {
@@ -102,26 +151,29 @@ public class PostService {
         optional = Optional.of(post);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
         return optional;
     }
 
-    public static String publishPost(String username, String description, String image) {
+    public static String publishPost(String username, String description, String image, String title) {
         connection = mariadbConnect.mdbconn();
         try (PreparedStatement statement = connection.prepareStatement("""
-                    INSERT INTO posts (servername, firstStep, creator, description, image) VALUES (?, null, (SELECT u.id from users u where u.username like ?), ?, ?)
+                    INSERT INTO posts (servername, firstStep, creator, description, image, title) VALUES (?, null, (SELECT u.id from users u where u.username like ?), ?, ?, ?)
                 """)) {
             statement.setString(1,config.getSrvIp());
             statement.setString(2,username);
             statement.setString(3,description);
             statement.setString(4,image);
+            statement.setString(5,title);
             statement.executeQuery();
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             try {
                 connection.close();
+                mariadbConnect.connclosed();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -129,6 +181,7 @@ public class PostService {
         }
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -164,7 +217,8 @@ public class PostService {
                     String servername = resultSet.getString("serverName");
                     String image = resultSet.getString("image");
                     String description = resultSet.getString("description");
-                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image);
+                    String title = resultSet.getString("title");
+                    post = new Post(creator, firstStep, id, servername, Base64machine.isBase64(image, id, 0, ""), description, image,title);
                     sol.add(post);
                 } while (resultSet.next());
             }
@@ -174,6 +228,7 @@ public class PostService {
         optional = Optional.of(sol);
         try {
             connection.close();
+            mariadbConnect.connclosed();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

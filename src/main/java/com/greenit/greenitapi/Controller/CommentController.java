@@ -41,7 +41,7 @@ public class CommentController {
         if(cached != null) return (List<Comment>) cached.getBody();
         List<Comment> step;
         try{
-        step = CommentService.getRepliesToComment(previd).orElse(null);}catch(Exception e){return null;}
+        step = CommentService.getRepliesToComment(previd).orElse(null);}catch(Exception e){return new ArrayList<>();}
         Cache.addToCache(new Request().setBody(List.of("/getReplies", previd)), new Response().setBody(step));
         if(step == null) return new ArrayList<>();
         return step;

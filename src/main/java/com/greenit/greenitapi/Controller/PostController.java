@@ -35,6 +35,16 @@ public class PostController {
         return post;
     }
 
+    @GetMapping("/postSavedByUser")
+    public static List<Post> getPostsSavedByUser(@RequestParam String username) {
+        List<Post> post;
+        try{
+            post = PostService.getPostsSavedByUser(username).orElse(null);
+        }catch(Exception e) {return new ArrayList<>();}
+        if(post == null) return new ArrayList<>();
+        return post;
+    }
+
     @GetMapping("/postById")
     public static Post getPostById(@RequestParam int id) {
         Response cached = Cache.getInstance().getFromCache(new Request().setBody(List.of("/postById", id)));
@@ -60,8 +70,8 @@ public class PostController {
     }
 
     @GetMapping("/publish")
-    public static String publishPost(@RequestParam String username, @RequestParam String description, @RequestParam String image) {
-        String sol = PostService.publishPost(username, description, image);
+    public static String publishPost(@RequestParam String username, @RequestParam String description, @RequestParam String image, @RequestParam String title) {
+        String sol = PostService.publishPost(username, description, image,title);
         if(sol.contains("OK"))Cache.deleteIterableCustomFromCache(new Request().setBody(List.of("/postsPaged")));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/post", username)));
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/getCountOfUserPosts", username)));

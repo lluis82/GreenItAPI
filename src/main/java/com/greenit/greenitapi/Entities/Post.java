@@ -8,8 +8,9 @@ public class Post {
     private String image;
     private String description;
     private String imagefield;
+    private String title;
 
-    public Post(User creator, Step firstStep, int id, String serverName, String image, String description, String image64){
+    public Post(User creator, Step firstStep, int id, String serverName, String image, String description, String image64, String title){
         this.creator = creator;
         this.id = id;
         this.firstStep = firstStep;
@@ -17,6 +18,7 @@ public class Post {
         this.image = image;
         this.description = description;
         this.imagefield = image64;
+        this.title = title;
     }
 
     public Step getFirstStep() {
@@ -24,18 +26,6 @@ public class Post {
     }
     public User getCreator() {
         return creator;
-    }
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public void setFirstStep(Step firstStep) {
-        this.firstStep = firstStep;
-    }
-    public void setCreator(User creator) {
-        this.creator = creator;
     }
     public String getServerName() {
         return serverName;
@@ -52,4 +42,5 @@ public class Post {
     public String getImagefield() {
         return imagefield;
     }
+    public String getTitle(){return title;}
 }

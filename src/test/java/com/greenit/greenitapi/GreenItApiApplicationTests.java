@@ -1,8 +1,13 @@
 package com.greenit.greenitapi;
 
 import com.greenit.greenitapi.Controller.*;
+import com.greenit.greenitapi.Entities.Caching.Response;
+import com.greenit.greenitapi.Entities.Comment;
+import com.greenit.greenitapi.Entities.Post;
 import com.greenit.greenitapi.Entities.User;
+import com.greenit.greenitapi.Services.CommentService;
 import com.greenit.greenitapi.Util.Config;
+import com.greenit.greenitapi.Util.mariadbConnect;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,7 +20,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,7 +48,6 @@ class GreenItApiApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].displayName").value("GreenIt enjoyer"));
-
     }
 
     @Test
@@ -44,12 +56,14 @@ class GreenItApiApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].displayName").value("hector"));
-
     }
 
     @Test
     public void testBackendCache() throws Exception{
         mockMvc.perform(get("http://localhost:8080/purgecache")).andExpect(status().isOk()).andExpect(content().string(new Config().getSrvName() + " OK"));
+
+        resetDatabase();
+
         //region server
         ServerController.meetServer("192.168.1.1","Eruruu");
         var a = ServerController.getServers();
@@ -61,7 +75,7 @@ class GreenItApiApplicationTests {
         //endregion
         //region user
         UserController.register("g@h.es","pass","Aruruu","","");
-        UserController.updateUser(UserController.getUserByName("Aruruu").getId(),"aruruu@uta.es","pass","Aruruu","","Uta FTW");
+        UserController.updateUser(UserController.getUserByName("Aruruu").getId(),"aruruu@uta.es","pass","Aruruu","iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=","Uta FTW");
         var e = UserController.getUser("a@b.es");
         var f = UserController.getUser("a@b.es");
         assertEquals("diferentes",e,f);
@@ -75,7 +89,7 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",i,j);
         //endregion
         //region post
-        PostController.publishPost("Aruruu","","");
+        PostController.publishPost("Aruruu","","","");
         var k = PostController.getPostById(12);
         var l = PostController.getPostById(12);
         assertEquals("diferentes",k,l);
@@ -153,7 +167,8 @@ class GreenItApiApplicationTests {
 
         //endregion
         //region comments
-        CommentController.commentOnPostOrComment(0,"",12,"Aruruu");
+        CommentController.commentOnPostOrComment(0,"",47,"Aruruu");
+        CommentController.commentOnPostOrComment(CommentController.getCommentsfromPost(47).get(0).getId(),"",47,"Aruruu");
         //CACHE DE GET COMMENTS FROM POST TIENE LA CACHE MAL, DESACTIVADA
         var aaa = CommentController.getCommentsfromPost(12);
         //var bb = CommentController.getCommentsfromPost(12);
@@ -164,9 +179,75 @@ class GreenItApiApplicationTests {
         assertEquals("diferentes",cc,dd);
         //endregion
         //region rrss
-        mockMvc.perform(get("http://localhost:8080/rrssprofile?username=jrber23"));
-        mockMvc.perform(get("http://localhost:8080/rrsspost?postid=49"));
-        mockMvc.perform(get("http://localhost:8080/rrssstep?stepid=26"));
+        RRSSController.embedpost(12);
+        RRSSController.embedstep(21);
+        RRSSController.embedprofile("jrber23");
+        RRSSController.getpostimg(12);
+        RRSSController.getprofileimg("hector");//vacia
+        RRSSController.getprofileimg("jrber");//base64 correcto
+        RRSSController.getprofileimg("jrber23");//http
+        RRSSController.getprofileimg("Aruruu");//invalid base64
+        RRSSController.getstepimg(21);
+        //endregion
+        //region unitTesting
+        User user = UserController.getUserByName("Aruruu");
+        User user2 = UserController.getUserByName("jrber23");
+        assertEquals("diferentes","Aruruu", user.getDisplayName());
+        assertEquals("diferentes","aruruu@uta.es", user.getEmail());
+        assertEquals("diferentes","pass", user.getPassword());
+        assertEquals("diferentes","Touka", user.getServerName());
+
+        Post post = PostController.getPostById(12);
+        assertEquals("diferentes","localhost:8080",post.getServerName());
+
+        Comment comment = CommentController.getCommentsfromPost(43).get(0);
+        assertEquals("diferentes","hector",comment.getCreator().getDisplayName());
+        assertEquals("diferentes","ADIOS",comment.getText());
+        assertEquals("diferentes",4,comment.getId());
+        assertEquals("diferentes",null,comment.getReplyto());
+        Comment reply = CommentController.getRepliesFromCommentID(4).get(0);
+        assertEquals("diferentes",comment.getId(),reply.getReplyto().getId());
+
+
+        Response response1 = new Response();
+        Response response2 = new Response();
+        response1.setBody(List.of(user, user2));
+        response2.setBody(List.of(user, user2));
+        assertEquals("diferentes", response1, response2);
+        assertEquals("diferentes", response1.getBody(), response2.getBody());
+        assertEquals("diferentes",response1.hashCode(), response2.hashCode());
+        assertEquals("diferentes", true, response1.equals(response2));
+        assertEquals("diferentes", true, response2.equals(response1));
+        //endregion
+        //region unitTestingErrors
+        assertEquals("diferentes",new ArrayList<>(),CommentController.getCommentsfromPost(444343));
+        assertEquals("diferentes",new ArrayList<>(),CommentController.getRepliesFromCommentID(545454));
+        assertEquals("diferentes",true,CommentController.commentOnPostOrComment(-545,"dsfds",243423,"ygddgf").contains("FAIL"));
+        assertEquals("diferentes",true,CommentController.commentOnPostOrComment(545,"dsfds",243423,"ygddgf").contains("FAIL"));
+        assertEquals("diferentes",null, CommentService.getCommentByID(-59));
+
+        assertEquals("diferentes",new ArrayList<>(),PostController.getAllPosts(-1));
+        assertEquals("diferentes",new ArrayList<>(),PostController.getPostByUser("gfdgdfgdfgdf"));
+        assertEquals("diferentes",null,PostController.getPostById(32423));
+        assertEquals("diferentes",0,PostController.getCountOfUserPosts("gfdgdfdgf"));
+        assertEquals("diferentes", true, PostController.publishPost("gfddfgfd","gdfgdf","gdfgdfgdf","gfgf").contains("FAIL"));
+
+        assertEquals("diferentes",true,LikeController.checklike(-4,"gfdgdf").contains("false"));
+        assertEquals("diferentes",0,LikeController.howmanylikes(-4));
+        assertEquals("diferentes",true,LikeController.like("gfdf",-1).contains("FAIL"));
+        assertEquals("diferentes",true,LikeController.unlike("gfdgdf",-76).contains("OK"));
+
+        assertEquals("diferentes",0,ReducedUserController.getFollowedCount(-45));
+        assertEquals("diferentes",0,ReducedUserController.getFollowersCount(-45));
+        assertEquals("diferentes",new ArrayList<>(),ReducedUserController.getFollowedbyUser(-45));
+        assertEquals("diferentes",new ArrayList<>(),ReducedUserController.getUserFollowers(-45));
+        assertEquals("diferentes",true,ReducedUserController.newFollower(-65,-64).contains("FAIL"));
+        assertEquals("diferentes",true,ReducedUserController.deleteFollower(-65,-64).contains("OK"));
+        assertEquals("diferentes",false,ReducedUserController.checkFollows(-65,-64));
+
+
+        System.out.println(ServerController.stats());
+
         //endregion
     }
 
@@ -180,7 +261,7 @@ class GreenItApiApplicationTests {
         } catch (Exception e){}
     }
     @Test
-    public void testDBConnectionBuffer(){
+    public void testDBSingleRequestAttack(){
         Thread t1 = new Thread(() -> {testconnectiondb();});
         Thread t2 = new Thread(() -> {testconnectiondb();});
         Thread t3 = new Thread(() -> {testconnectiondb();});
@@ -223,14 +304,14 @@ class GreenItApiApplicationTests {
         t19.start();
         t20.start();
         try {
-            Thread.sleep(30000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void test() throws Exception {
+    public void SeleniumRemoto() throws Exception {
         WebDriverManager.edgedriver().setup();
         webdriver=new EdgeDriver();
         webdriver.manage().window().maximize();
@@ -272,6 +353,47 @@ class GreenItApiApplicationTests {
         Thread.sleep(2000);
 
         webdriver.close();
+    }
+
+    public static void resetDatabase() throws SQLException {
+        String s;
+        StringBuffer sb = new StringBuffer();
+
+        try {
+            FileReader fr = new FileReader(new File(Config.getResourcesLocation() + "awsFinal.sql"));
+            // be sure to not have line starting with "--" or "/*" or any other non aplhabetical character
+
+            BufferedReader br = new BufferedReader(fr);
+
+            while ((s = br.readLine()) != null) {
+                sb.append(s);
+            }
+            br.close();
+
+            // here is our splitter ! We use ";" as a delimiter for each request
+            // then we are sure to have well formed statements
+            String[] inst = sb.toString().split(";");
+
+            Connection c = mariadbConnect.mdbconn();
+            Statement st = c.createStatement();
+
+            for (int i = 0; i < inst.length; i++) {
+                // we ensure that there is no spaces before or after the request string
+                // in order to not execute empty statements
+                if (!inst[i].trim().equals("")) {
+                    st.executeUpdate(inst[i] + ";");
+                    System.out.println(">>" + inst[i] + ";");
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("*** Error : " + e);
+            System.out.println("*** ");
+            System.out.println("*** Error : ");
+            e.printStackTrace();
+            System.out.println("################################################");
+            System.out.println(sb);
+        }
     }
 
 }

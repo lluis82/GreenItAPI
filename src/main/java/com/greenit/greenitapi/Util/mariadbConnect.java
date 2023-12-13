@@ -6,6 +6,9 @@ import java.util.Random;
 
 public class mariadbConnect {
     private static Config config = new Config();
+
+    private static int picocons = 0;
+    private static int cons = 0;
     public static Connection mdbconn() {
         Connection connection = null;
         try {
@@ -21,9 +24,13 @@ public class mariadbConnect {
             connection = DriverManager.getConnection(
                     config.getMdbURL(), config.getMdbUser(), config.getMdbPass()
             );
+            cons++;
+            if(cons>picocons)picocons=cons;
         } catch (Exception e) {
             System.out.println("Error al conectar con la BD de mariaDB " + e);
         }
         return connection;
     }
+    public static void connclosed(){cons--;}
+    public static int getPicocons(){return picocons;}
 }
