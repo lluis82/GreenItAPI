@@ -54,6 +54,7 @@ public class StepController {
     public static String publishStep(@RequestParam int prevStepId, @RequestParam Boolean isFirst, @RequestParam String description, @RequestParam int postid, @RequestParam String image) {
         String sol = StepService.publishStep(prevStepId, isFirst, description, postid, image);
         if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/prevstep", prevStepId)));
+        if(sol.contains("OK"))Cache.deleteFromCache(new Request().setBody(List.of("/postById", postid)));
         return sol;
     }
 }

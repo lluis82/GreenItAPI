@@ -7,10 +7,7 @@ import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -145,14 +142,17 @@ public class StepService {
 
     public static String publishStep(int prevStepId, Boolean isFirst, String description, int postId, String image) {
         connection = mariadbConnect.mdbconn();
-
+        long id = 0;
         try (PreparedStatement statement = connection.prepareStatement("""
                     INSERT INTO step (description, previousStep, image) VALUES (?, null, ?)
-                """)) {
+                """, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1,description);
             statement.setString(2,image);
             statement.executeQuery();
-
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getLong(1);
+            }
             if(isFirst){
                 try (PreparedStatement statement2 = connection.prepareStatement("""
                     UPDATE posts set firstStep = (select s.id from step s where s.description like ?) WHERE id like ?
@@ -204,6 +204,7 @@ public class StepService {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-        return config.getSrvName() + " OK";
+        //return config.getSrvName() + " OK";
+        return id + "";
     }
 }

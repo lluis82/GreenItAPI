@@ -10,10 +10,7 @@ import com.greenit.greenitapi.Util.Config;
 import com.greenit.greenitapi.Util.mariadbConnect;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -160,15 +157,20 @@ public class PostService {
 
     public static String publishPost(String username, String description, String image, String title) {
         connection = mariadbConnect.mdbconn();
+        long id = 0;
         try (PreparedStatement statement = connection.prepareStatement("""
                     INSERT INTO posts (servername, firstStep, creator, description, image, title) VALUES (?, null, (SELECT u.id from users u where u.username like ?), ?, ?, ?)
-                """)) {
+                """, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1,config.getSrvIp());
             statement.setString(2,username);
             statement.setString(3,description);
             statement.setString(4,image);
             statement.setString(5,title);
             statement.executeQuery();
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getLong(1);
+            }
         } catch (Exception e) {
             System.out.println("Error al recuperar info de la BD");
             try {
@@ -185,7 +187,8 @@ public class PostService {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-        return config.getSrvName() + " OK";
+        //return config.getSrvName() + " OK";
+        return id + "";
     }
 
     public static Optional<List<Post>> getAllPostsPaged(int page){
